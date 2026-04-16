@@ -38,11 +38,15 @@ body::before {
   background-image: linear-gradient(var(--grid) 1px,transparent 1px), linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:36px 36px; pointer-events:none; z-index:0;
 }
-body::after {
-  content:''; position:fixed; top:40%; left:55%; transform:translate(-50%,-50%);
-  width:1000px; height:800px;
-  background:radial-gradient(ellipse,rgba(0,60,150,0.08) 0%,transparent 70%);
-  pointer-events:none; z-index:0;
+/* ── RADAR DE FUNDO ── */
+#radar-bg {
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:180vmax; height:180vmax;
+  pointer-events:none;
+  z-index:0;
+  opacity:1;
 }
 
 /* ══════════════════════════════════════
@@ -85,39 +89,44 @@ body::after {
 .weather-row {
   display:flex; gap:10px;
 }
+.weather-row {
+  display:flex; gap:10px;
+}
 .weather-card {
   flex:1; background:var(--card); border:1px solid var(--border);
-  border-radius:12px; padding:10px 14px;
+  border-radius:10px; padding:7px 14px;
   position:relative; overflow:hidden; transition:box-shadow .25s;
+  display:flex; align-items:center; gap:12px;
 }
 .weather-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2.5px;
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
   background:linear-gradient(90deg,var(--blue),var(--cyan));
-  border-radius:12px 12px 0 0;
+  border-radius:10px 10px 0 0;
 }
-.weather-card:hover { box-shadow:0 0 18px rgba(0,180,255,.15); }
+.weather-card:hover { box-shadow:0 0 16px rgba(0,180,255,.14); }
 .w-city {
-  font-family:var(--mono); font-size:9.5px; letter-spacing:1.5px;
-  text-transform:uppercase; color:var(--dim); margin-bottom:6px;
+  font-family:var(--mono); font-size:9px; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--dim); white-space:nowrap;
 }
-.w-main { display:flex; align-items:center; gap:10px; }
+.w-main { display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .w-ico {
-  width:42px; height:42px; flex-shrink:0;
+  width:32px; height:32px; flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
   background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18);
-  border-radius:10px; font-size:24px;
+  border-radius:8px; font-size:18px;
 }
-.w-temp { font-size:28px; font-weight:800; line-height:1; letter-spacing:-1px; }
-.w-temp sup { font-size:13px; font-weight:400; vertical-align:super; color:var(--dim); }
-.w-desc { font-size:10.5px; color:var(--dim); font-weight:500; margin-top:2px; }
-.w-meta { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+.w-temp { font-size:22px; font-weight:800; line-height:1; letter-spacing:-1px; }
+.w-temp sup { font-size:11px; font-weight:400; vertical-align:super; color:var(--dim); }
+.w-desc { font-size:9.5px; color:var(--dim); font-weight:500; margin-top:1px; white-space:nowrap; }
+.w-center { flex:1; min-width:0; }
+.w-meta { display:flex; gap:5px; flex-wrap:wrap; }
 .w-badge {
   display:flex; align-items:center; gap:3px;
-  font-family:var(--mono); font-size:9px; color:var(--dim);
+  font-family:var(--mono); font-size:8.5px; color:var(--dim);
   background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.06);
-  border-radius:4px; padding:2px 6px;
+  border-radius:4px; padding:2px 5px;
 }
-.w-loading { font-family:var(--mono); font-size:9px; color:var(--dim); padding:16px 0; text-align:center; letter-spacing:1px; }
+.w-loading { font-family:var(--mono); font-size:9px; color:var(--dim); padding:8px 0; text-align:center; letter-spacing:1px; }
 .w-spin { display:inline-block; animation:spin 1s linear infinite; margin-right:5px; }
 
 /* ══════════════════════════════════════
@@ -395,9 +404,68 @@ body::after {
 .dot.g { background:var(--green); box-shadow:0 0 5px var(--green); }
 .dot.b { background:var(--blue);  box-shadow:0 0 5px var(--blue);  animation-delay:.5s; }
 .dot.a { background:var(--amber); box-shadow:0 0 5px var(--amber); animation-delay:1s; }
+
+/* ══════════════════════════════════════
+   RADAR DE FUNDO ANIMADO
+══════════════════════════════════════ */
 </style>
 </head>
 <body>
+
+<!-- ══ RADAR DE FUNDO ══ -->
+<svg id="radar-bg" viewBox="-900 -900 1800 1800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <!-- Gradiente cônico da sombra: nasce opaco logo atrás da linha,
+         decai suavemente por ~120° até transparente.
+         Simulado com múltiplos setores em <g> girante. -->
+    <radialGradient id="rg-line" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
+                    cx="0" cy="0" r="900" fx="0" fy="0">
+      <stop offset="0%"   stop-color="#00ffea" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#00ffea" stop-opacity="0.28"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Anéis concêntricos — bem sutis -->
+  <circle cx="0" cy="0" r="150" fill="none" stroke="#00b4ff" stroke-width="0.5" opacity="0.07"/>
+  <circle cx="0" cy="0" r="300" fill="none" stroke="#00b4ff" stroke-width="0.5" opacity="0.06"/>
+  <circle cx="0" cy="0" r="450" fill="none" stroke="#00b4ff" stroke-width="0.4" opacity="0.05"/>
+  <circle cx="0" cy="0" r="600" fill="none" stroke="#00b4ff" stroke-width="0.4" opacity="0.04"/>
+  <circle cx="0" cy="0" r="750" fill="none" stroke="#00b4ff" stroke-width="0.3" opacity="0.03"/>
+  <circle cx="0" cy="0" r="870" fill="none" stroke="#00b4ff" stroke-width="0.3" opacity="0.02"/>
+
+  <!-- Grupo giratório completo — 22s, bem lento -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate"
+      from="0 0 0" to="360 0 0" dur="22s" repeatCount="indefinite"/>
+
+    <!-- Sombra: 8 fatias de setor, cada uma ~15° atrás da linha,
+         opacidade decrescente — simula decaimento tipo phosphor -->
+    <!-- fatia 1: logo atrás — mais opaca -->
+    <path d="M0,0 L900,0 A900,900 0 0,0 891,-140 Z"  fill="#00d8e8" opacity="0.055"/>
+    <!-- fatia 2 -->
+    <path d="M0,0 L891,-140 A900,900 0 0,0 863,-278 Z" fill="#00c0d8" opacity="0.042"/>
+    <!-- fatia 3 -->
+    <path d="M0,0 L863,-278 A900,900 0 0,0 818,-409 Z" fill="#00aac8" opacity="0.030"/>
+    <!-- fatia 4 -->
+    <path d="M0,0 L818,-409 A900,900 0 0,0 755,-530 Z" fill="#0094b8" opacity="0.020"/>
+    <!-- fatia 5 -->
+    <path d="M0,0 L755,-530 A900,900 0 0,0 675,-636 Z" fill="#007ea8" opacity="0.013"/>
+    <!-- fatia 6 -->
+    <path d="M0,0 L675,-636 A900,900 0 0,0 580,-726 Z" fill="#0068a0" opacity="0.007"/>
+    <!-- fatia 7 — apagando -->
+    <path d="M0,0 L580,-726 A900,900 0 0,0 471,-795 Z" fill="#005090" opacity="0.004"/>
+    <!-- fatia 8 — quase invisível -->
+    <path d="M0,0 L471,-795 A900,900 0 0,0 350,-846 Z" fill="#003878" opacity="0.002"/>
+
+    <!-- Linha de varredura principal — fina, luminosa -->
+    <line x1="0" y1="0" x2="900" y2="0"
+          stroke="#00ffea" stroke-width="0.9" opacity="0.45"/>
+
+    <!-- Leve brilho extra na ponta da linha -->
+    <circle cx="900" cy="0" r="3" fill="#00ffea" opacity="0.25"/>
+  </g>
+</svg>
+
 <div class="page">
 
   <!-- ══════════════════════════════════
@@ -408,10 +476,7 @@ body::after {
   </div>
 
   <!-- BLOCO 1 — CLIMA -->
-  <div class="weather-row" id="weatherRow">
-    <div class="weather-card"><div class="w-loading"><span class="w-spin">⟳</span> Carregando...</div></div>
-    <div class="weather-card"><div class="w-loading"><span class="w-spin">⟳</span> Carregando...</div></div>
-  </div>
+  <div class="weather-row" id="weatherRow"></div>
 
   <!-- ══════════════════════════════════
        DIVISOR — EQUIPE
@@ -500,11 +565,11 @@ body::after {
   <!-- BLOCO 4 — ARQUITETURA EM CAMADAS -->
   <div class="arch-wrapper">
     <div class="arch-section-title">Arquitetura de Cybersegurança</div>
-    <div class="arch-section-sub">// ORGANOGRAMA DE INTEGRAÇÃO — CENTRO DE OPERAÇÕES DE SEGURANÇA //</div>
+    <div class="arch-section-sub">// ORGANOGRAMA DE INTEGRAÇÃO — 4 CAMADAS — PERÍMETRO → NUVEM → SIEM → RESPOSTA SOC //</div>
 
     <!-- CAMADA 0: AMEAÇAS EXTERNAS (topo) -->
     <div class="layer">
-      <span class="layer-label ll-ext">🌍 Superfície de Ameaças Externas</span>
+      <span class="layer-label ll-ext">🌍 Superfície de Ameaças — Externas e Perímetro Local</span>
       <div class="layer-nodes">
         <div class="node axur">
           <div class="node-header">
@@ -525,7 +590,7 @@ body::after {
             <span class="npill">Feeds de IOC</span><span class="npill">Takedown</span>
           </div>
         </div>
-        <div class="node sonicwall">
+        <div class="node sonicwall" style="border-color:rgba(255,102,0,.6); box-shadow:0 0 12px rgba(255,102,0,.12);">
           <div class="node-header">
             <div class="node-logo">
               <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
@@ -537,11 +602,23 @@ body::after {
                 <circle cx="24" cy="11" r="3" fill="#00e676"/>
               </svg>
             </div>
-            <div><div class="node-name" style="color:#ff9955;">SonicWall NGFW</div><div class="node-sub">FIREWALL DE PRÓXIMA GERAÇÃO</div></div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div class="node-name" style="color:#ff9955;">SonicWall NGFW</div>
+                <span style="font-family:var(--mono);font-size:7.5px;padding:1px 6px;border-radius:10px;background:rgba(255,102,0,.15);border:1px solid rgba(255,102,0,.4);color:#ff9955;white-space:nowrap;">🏠 REDE LOCAL</span>
+              </div>
+              <div class="node-sub">FIREWALL DE PRÓXIMA GERAÇÃO — PERÍMETRO ON-PREMISES</div>
+            </div>
           </div>
           <div class="node-pills">
-            <span class="npill">DPI / IPS / IDS</span><span class="npill">VPN SSL / IPSec</span>
-            <span class="npill">Filtragem Web</span><span class="npill">Bloqueio Geo</span>
+            <span class="npill">Firewall de Próxima Geração</span>
+            <span class="npill">Inspeção Profunda (DPI)</span>
+            <span class="npill">IPS / IDS</span>
+            <span class="npill">VPN SSL / IPSec</span>
+            <span class="npill">Filtragem de Conteúdo Web</span>
+            <span class="npill">Bloqueio por Geolocalização</span>
+            <span class="npill">Segmentação de Rede</span>
+            <span class="npill">Anti-Malware de Gateway</span>
           </div>
         </div>
       </div>
@@ -763,28 +840,10 @@ body::after {
           </div>
         </div>
 
-        <div class="node sonicwall" style="border-color:rgba(255,102,0,.45);">
-          <div class="node-header">
-            <div class="node-logo">
-              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
-                <rect x="4" y="10" width="24" height="14" rx="3" fill="#ff6600" opacity=".3" stroke="#ff6600" stroke-width="1.5"/>
-                <rect x="7" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                <rect x="13" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                <rect x="19" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                <path d="M16 4v6M12 4l4 6 4-6" stroke="#ff6600" stroke-width="1.5" stroke-linecap="round"/>
-                <circle cx="24" cy="11" r="3" fill="#00e676"/>
-              </svg>
-            </div>
-            <div><div class="node-name" style="color:#ff9955;">SonicWall — Gestão</div><div class="node-sub">CONSOLE DE GERENCIAMENTO NGFW</div></div>
-          </div>
-          <div class="node-pills">
-            <span class="npill">Políticas de Firewall</span><span class="npill">Regras DPI</span>
-            <span class="npill">Relatórios</span><span class="npill">Resposta Automática</span>
-          </div>
-        </div>
 
       </div>
     </div>
+
 
     <!-- Legenda + Status -->
     <div class="arch-footer">
@@ -851,32 +910,53 @@ async function fetchWeather(city) {
   };
 }
 
+/* ── renderWeather: atualiza os dados SEM recriar os cards
+   (evita o jump de scroll causado por innerHTML reset)     ── */
 async function renderWeather() {
   const row = document.getElementById('weatherRow');
-  row.innerHTML = '';
   const today = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-  for (const city of CITIES) {
-    const el = document.createElement('div');
-    el.className = 'weather-card';
+
+  /* Primeira chamada: cria os cards; atualizações seguintes: só troca texto */
+  const isFirst = row.children.length === 0 || row.querySelector('.w-loading');
+
+  for (let i = 0; i < CITIES.length; i++) {
+    const city = CITIES[i];
+    let card;
+
+    if (isFirst) {
+      card = document.createElement('div');
+      card.className = 'weather-card';
+      card.dataset.city = i;
+      row.appendChild(card);
+    } else {
+      card = row.querySelector(`[data-city="${i}"]`);
+      if (!card) continue;
+    }
+
     try {
       const w = await fetchWeather(city);
       const wi = wInfo(w.code);
-      el.innerHTML = `
-        <div class="w-city">📍 ${city.name}, Brasil</div>
+      /* innerHTML apenas neste card individual — não afeta o layout do resto da página */
+      card.innerHTML = `
         <div class="w-main">
           <div class="w-ico">${wi.i}</div>
-          <div><div class="w-temp">${w.temp}<sup>°C</sup></div><div class="w-desc">${wi.d}</div></div>
+          <div>
+            <div class="w-temp">${w.temp}<sup>°C</sup></div>
+            <div class="w-desc">${wi.d}</div>
+          </div>
         </div>
-        <div class="w-meta">
-          <div class="w-badge">🌡️ ${w.max}°/${w.min}°</div>
-          <div class="w-badge">💧 ${w.hum}%</div>
-          <div class="w-badge">💨 ${w.wind} km/h</div>
-          <div class="w-badge">📅 ${today}</div>
+        <div class="w-center">
+          <div class="w-city">📍 ${city.name}, Brasil</div>
+          <div class="w-meta">
+            <div class="w-badge">🌡️ ${w.max}°/${w.min}°</div>
+            <div class="w-badge">💧 ${w.hum}%</div>
+            <div class="w-badge">💨 ${w.wind} km/h</div>
+            <div class="w-badge">📅 ${today}</div>
+          </div>
         </div>`;
     } catch {
-      el.innerHTML = `<div class="w-city">📍 ${city.name}</div><div class="w-loading">Sem conexão</div>`;
+      if (isFirst) card.innerHTML = `<div class="w-city">📍 ${city.name}</div><div class="w-loading">Sem conexão</div>`;
     }
-    row.appendChild(el);
   }
 }
 
@@ -898,7 +978,11 @@ function renderTeam() {
 
 renderTeam();
 renderWeather();
+/* Atualiza clima a cada 10 min preservando posição de scroll */
 setInterval(renderWeather, 10 * 60 * 1000);
+
+/* Radar: implementado como SVG fixo no HTML — sem canvas */
+
 </script>
 </body>
 </html>
