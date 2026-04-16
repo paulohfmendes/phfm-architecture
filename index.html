@@ -8,794 +8,879 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap');
 
 /* ══════════════════════════════════════
-   RESET + VARIÁVEIS
+   VARIÁVEIS
 ══════════════════════════════════════ */
 :root {
-  --bg:     #040d1a;
-  --card:   #0a1e35;
-  --blue:   #00b4ff;
-  --cyan:   #00ffea;
-  --green:  #00e676;
-  --amber:  #ffab00;
-  --purple: #9c6eff;
-  --orange: #ff6600;
-  --border: rgba(0,180,255,0.22);
-  --text:   #d4eaf7;
-  --dim:    #5a7f9c;
-  --mono:   'Share Tech Mono', monospace;
-  --sans:   'Exo 2', sans-serif;
-  --grid:   rgba(0,180,255,0.04);
+  --bg:      #040d1a;
+  --panel:   #071628;
+  --card:    #0a1e35;
+  --blue:    #00b4ff;
+  --cyan:    #00ffea;
+  --green:   #00e676;
+  --amber:   #ffab00;
+  --purple:  #9c6eff;
+  --orange:  #ff6600;
+  --red:     #ff4444;
+  --border:  rgba(0,180,255,0.22);
+  --text:    #d4eaf7;
+  --dim:     #5a7f9c;
+  --mono:    'Share Tech Mono', monospace;
+  --sans:    'Exo 2', sans-serif;
+  --grid:    rgba(0,180,255,0.04);
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; background:var(--bg); font-family:var(--sans); color:var(--text); overflow-x:hidden; }
 
-html, body {
-  width:100%; height:100%;
-  overflow:hidden;
-  background:var(--bg);
-  font-family:var(--sans);
-  color:var(--text);
+/* Fundo grade */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image: linear-gradient(var(--grid) 1px,transparent 1px), linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:36px 36px; pointer-events:none; z-index:0;
 }
-
-/* ── FUNDO: grade + radar ── */
-#bg-layer {
-  position:fixed; inset:0;
-  pointer-events:none; z-index:0;
-  overflow:hidden;
-}
-#bg-layer::before {
-  content:''; position:absolute; inset:0;
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size:36px 36px;
-}
+/* ── RADAR DE FUNDO ── */
 #radar-bg {
-  position:absolute; top:50%; left:50%;
+  position:fixed;
+  top:50%; left:50%;
   transform:translate(-50%,-50%);
   width:180vmax; height:180vmax;
-  pointer-events:none; will-change:transform;
+  pointer-events:none;
+  z-index:0;
+  opacity:1;
+  will-change:transform;
 }
 
 /* ══════════════════════════════════════
-   GRID PRINCIPAL — 3 LINHAS FIXAS
-   Linha 1: clima + equipe       ~130px
-   Linha 2: links rápidos        ~115px
-   Linha 3: arquitetura          resto
+   PAGE WRAPPER
 ══════════════════════════════════════ */
 .page {
   position:relative; z-index:1;
-  width:100%; height:100%;
-  display:grid;
-  grid-template-rows: 205px 118px 1fr;
-  grid-template-columns: 1fr;
-  padding:8px 12px;
-  gap:6px;
-  overflow:hidden;
+  width:100%;
+  display:flex; flex-direction:column;
+  padding:12px 16px 14px;
+  gap:0;
 }
-
-/* ── DIVISORES COM LABEL ── */
-.sdiv {
-  display:flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:10px;
-  letter-spacing:1.8px; text-transform:uppercase;
-  white-space:nowrap; padding:3px 10px; border-radius:20px;
-  flex-shrink:0;
-}
-.sdiv.weather { color:var(--blue);   background:rgba(0,180,255,.07); border:1px solid rgba(0,180,255,.25); }
-.sdiv.team    { color:var(--purple); background:rgba(156,110,255,.07); border:1px solid rgba(156,110,255,.25); }
-.sdiv.menu    { color:var(--cyan);   background:rgba(0,255,234,.07); border:1px solid rgba(0,255,234,.25); }
-.sdiv.arch    { color:var(--amber);  background:rgba(255,171,0,.07); border:1px solid rgba(255,171,0,.25); }
-.sdiv-line { flex:1; height:1px; background:linear-gradient(90deg,rgba(0,180,255,.2),transparent); }
 
 /* ══════════════════════════════════════
-   LINHA 1 — CLIMA + EQUIPE
+   DIVISORES COM LABEL
 ══════════════════════════════════════ */
-.row1 {
-  display:grid;
-  grid-template-columns: 360px 1fr;
-  gap:8px;
-  min-height:0;
-  overflow:hidden;
+.section-divider {
+  display:flex; align-items:center; gap:10px;
+  margin:10px 0 8px;
+  flex-shrink:0;
+}
+.section-divider .sdl {
+  font-family:var(--mono); font-size:9px; letter-spacing:2px;
+  text-transform:uppercase; white-space:nowrap;
+  padding:3px 10px; border-radius:20px;
+  display:flex; align-items:center; gap:6px;
+}
+.section-divider .sdl.weather { color:var(--blue);   background:rgba(0,180,255,0.07); border:1px solid rgba(0,180,255,0.25); }
+.section-divider .sdl.team    { color:var(--purple);  background:rgba(156,110,255,0.07); border:1px solid rgba(156,110,255,0.25); }
+.section-divider .sdl.menu    { color:var(--cyan);   background:rgba(0,255,234,0.07); border:1px solid rgba(0,255,234,0.25); }
+.section-divider .sdl.arch    { color:var(--amber);  background:rgba(255,171,0,0.07); border:1px solid rgba(255,171,0,0.25); }
+.section-divider::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(0,180,255,0.2), transparent);
 }
 
-/* bloco interno de cada secao */
-.section-block {
-  display:flex; flex-direction:column; gap:5px; min-height:0; overflow:hidden;
+/* ══════════════════════════════════════
+   BLOCO 1 — CLIMA
+══════════════════════════════════════ */
+.weather-row {
+  display:flex; gap:10px;
 }
-.section-header {
-  display:flex; align-items:center; gap:8px; flex-shrink:0;
+.weather-row {
+  display:flex; gap:10px;
 }
-
-/* ── CLIMA ── */
-.weather-wrap { display:flex; gap:6px; flex:1; min-height:0; }
 .weather-card {
   flex:1; background:var(--card); border:1px solid var(--border);
-  border-radius:10px; padding:8px 11px;
-  position:relative; overflow:hidden; transition:box-shadow .2s;
+  border-radius:10px; padding:7px 14px;
+  position:relative; overflow:hidden; transition:box-shadow .25s;
+  display:flex; align-items:center; gap:12px;
 }
 .weather-card::before {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
   background:linear-gradient(90deg,var(--blue),var(--cyan));
   border-radius:10px 10px 0 0;
 }
-.weather-card:hover { box-shadow:0 0 14px rgba(0,180,255,.15); }
-.w-city { font-family:var(--mono); font-size:8.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
-.w-main { display:flex; align-items:center; gap:8px; }
-.w-ico  { width:36px; height:36px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); border-radius:8px; font-size:20px; }
-.w-temp { font-size:28px; font-weight:800; line-height:1; letter-spacing:-1px; }
-.w-temp sup { font-size:10px; font-weight:400; vertical-align:super; color:var(--dim); }
-.w-desc { font-size:9.5px; color:var(--dim); font-weight:500; margin-top:1px; }
-.w-meta { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
-.w-badge { display:flex; align-items:center; gap:2px; font-family:var(--mono); font-size:8px; color:var(--dim); background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.06); border-radius:3px; padding:1px 5px; }
-.w-loading { font-family:var(--mono); font-size:8.5px; color:var(--dim); padding:12px 0; text-align:center; }
-.w-spin { display:inline-block; animation:spin 1s linear infinite; margin-right:4px; }
+.weather-card:hover { box-shadow:0 0 16px rgba(0,180,255,.14); }
+.w-city {
+  font-family:var(--mono); font-size:9px; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--dim); white-space:nowrap;
+}
+.w-main { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.w-ico {
+  width:32px; height:32px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18);
+  border-radius:8px; font-size:18px;
+}
+.w-temp { font-size:22px; font-weight:800; line-height:1; letter-spacing:-1px; }
+.w-temp sup { font-size:11px; font-weight:400; vertical-align:super; color:var(--dim); }
+.w-desc { font-size:9.5px; color:var(--dim); font-weight:500; margin-top:1px; white-space:nowrap; }
+.w-center { flex:1; min-width:0; }
+.w-meta { display:flex; gap:5px; flex-wrap:wrap; }
+.w-badge {
+  display:flex; align-items:center; gap:3px;
+  font-family:var(--mono); font-size:8.5px; color:var(--dim);
+  background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.06);
+  border-radius:4px; padding:2px 5px;
+}
+.w-loading { font-family:var(--mono); font-size:9px; color:var(--dim); padding:8px 0; text-align:center; letter-spacing:1px; }
+.w-spin { display:inline-block; animation:spin 1s linear infinite; margin-right:5px; }
 
-/* ── EQUIPE ── */
-.team-hdr { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+/* ══════════════════════════════════════
+   BLOCO 2 — EQUIPE
+══════════════════════════════════════ */
+.team-hdr { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
 .team-title {
-  font-size:clamp(12px,1.2vw,16px); font-weight:800; letter-spacing:2.5px; text-transform:uppercase;
+  font-size:clamp(14px,1.6vw,20px); font-weight:800; letter-spacing:3px; text-transform:uppercase;
   background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
-.team-sub { font-family:var(--mono); font-size:8px; color:var(--dim); letter-spacing:1.2px; margin-top:1px; }
+.team-sub { font-family:var(--mono); font-size:9px; color:var(--dim); letter-spacing:1.5px; margin-top:2px; }
 .team-pill {
-  margin-left:auto; display:flex; align-items:center; gap:4px;
-  font-family:var(--mono); font-size:8px; color:var(--dim);
-  background:rgba(0,0,0,.3); border:1px solid var(--border); border-radius:20px; padding:2px 8px;
+  margin-left:auto; display:flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:9px; color:var(--dim);
+  background:rgba(0,0,0,.3); border:1px solid var(--border); border-radius:20px; padding:3px 10px;
 }
 .team-grid {
-  display:grid; grid-template-columns:repeat(5,1fr); gap:5px;
-  flex:1; min-height:0; overflow:hidden;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(195px,1fr)); gap:7px;
 }
 .member-card {
-  background:var(--card); border:1px solid var(--border); border-radius:8px;
-  padding:8px 10px; display:flex; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:8px 11px; display:flex; align-items:center; gap:10px;
   transition:all .2s; position:relative; overflow:hidden; cursor:default;
 }
 .member-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+  content:''; position:absolute; left:0; top:0; bottom:0; width:2.5px;
   background:linear-gradient(180deg,var(--blue),var(--purple));
-  transform:scaleY(0); transition:transform .2s;
+  transform:scaleY(0); transition:transform .2s; border-radius:0 2px 2px 0;
 }
-.member-card:hover { background:rgba(0,100,180,.13); border-color:rgba(0,180,255,.4); transform:translateY(-1px); }
+.member-card:hover { background:rgba(0,100,180,.13); border-color:rgba(0,180,255,.4); transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,180,255,.1); }
 .member-card:hover::before { transform:scaleY(1); }
 .m-av {
-  width:38px; height:38px; flex-shrink:0; border-radius:50%;
+  width:36px; height:36px; flex-shrink:0; border-radius:50%;
   border:1.5px solid rgba(0,180,255,.3); background:rgba(0,180,255,.1);
-  overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:18px;
+  overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:17px;
+  box-shadow:0 0 8px rgba(0,180,255,.15); transition:border-color .2s, box-shadow .2s;
 }
+.member-card:hover .m-av { border-color:rgba(0,180,255,.65); box-shadow:0 0 16px rgba(0,180,255,.32); }
 .m-av img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-.m-name { font-size:12px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; }
-.m-role { font-family:var(--mono); font-size:9px; color:var(--dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.m-name { font-size:12.5px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; }
+.m-role { font-family:var(--mono); font-size:9.5px; color:var(--dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:.3px; }
 
 /* ══════════════════════════════════════
-   LINHA 2 — LINKS RÁPIDOS
+   BLOCO 3 — MENU RÁPIDO
 ══════════════════════════════════════ */
-.row2 { display:flex; flex-direction:column; gap:4px; min-height:0; }
-.menu-row { display:flex; gap:8px; flex:1; min-height:0; }
-.menu-group { flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
+.menu-row { display:flex; gap:10px; flex-wrap:wrap; }
+.menu-group { flex:1; min-width:160px; display:flex; flex-direction:column; gap:4px; }
 .menu-lbl {
-  font-family:var(--mono); font-size:8px; letter-spacing:1.2px; text-transform:uppercase;
-  color:var(--dim); display:flex; align-items:center; gap:5px; flex-shrink:0;
+  font-family:var(--mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--dim); display:flex; align-items:center; gap:6px; padding:0 2px; margin-bottom:2px;
 }
 .menu-lbl::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(0,180,255,.2),transparent); }
 .menu-link {
-  display:flex; align-items:center; gap:8px; padding:7px 10px;
-  background:var(--card); border:1px solid var(--border); border-radius:7px;
-  text-decoration:none; color:var(--text); transition:all .2s;
-  position:relative; overflow:hidden; flex:1;
+  display:flex; align-items:center; gap:9px; padding:7px 10px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  text-decoration:none; color:var(--text); transition:all .2s; position:relative; overflow:hidden;
 }
 .menu-link::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:2.5px;
-  background:var(--blue); transform:scaleY(0); transition:transform .2s;
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--blue); transform:scaleY(0); transition:transform .2s; border-radius:0 2px 2px 0;
 }
-.menu-link:hover { background:rgba(0,100,180,.15); border-color:rgba(0,180,255,.4); transform:translateX(2px); }
+.menu-link:hover { background:rgba(0,100,180,.15); border-color:rgba(0,180,255,.4); transform:translateX(2px); box-shadow:0 0 12px rgba(0,180,255,.12); }
 .menu-link:hover::before { transform:scaleY(1); }
-.mi-ico { width:28px; height:28px; flex-shrink:0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); }
-.mi-title { font-size:12.5px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mi-desc  { font-size:10px; color:var(--dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mi-arr   { font-size:9px; color:var(--dim); margin-left:auto; transition:color .2s; flex-shrink:0; }
-.menu-link:hover .mi-arr { color:var(--blue); }
+.mi-ico {
+  width:28px; height:28px; flex-shrink:0; border-radius:7px;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+  background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); transition:transform .2s;
+}
+.menu-link:hover .mi-ico { transform:scale(1.1); }
+.mi-title { font-size:12px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mi-desc  { font-size:10px; color:var(--dim); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mi-arr   { font-size:10px; color:var(--dim); margin-left:auto; transition:color .2s,transform .2s; }
+.menu-link:hover .mi-arr { color:var(--blue); transform:translateX(2px); }
 
 /* ══════════════════════════════════════
-   LINHA 3 — ARQUITETURA
+   BLOCO 4 — ARQUITETURA DE CYBERSEGURANÇA
+   Organograma em camadas
 ══════════════════════════════════════ */
-.row3 { display:flex; flex-direction:column; gap:3px; min-height:0; overflow:hidden; }
-.arch-title {
-  font-size:clamp(11px,1.1vw,14px); font-weight:800; letter-spacing:2px; text-transform:uppercase;
+.arch-wrapper {
+  display:flex; flex-direction:column; gap:0; position:relative;
+}
+
+/* Título da seção arquitetura */
+.arch-section-title {
+  font-size:clamp(13px,1.4vw,17px); font-weight:800; letter-spacing:2.5px; text-transform:uppercase;
   background:linear-gradient(90deg,var(--amber),var(--orange),var(--cyan));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  flex-shrink:0;
+  margin-bottom:2px;
 }
-.arch-sub { font-family:var(--mono); font-size:7.5px; color:var(--dim); letter-spacing:1.2px; flex-shrink:0; }
+.arch-section-sub { font-family:var(--mono); font-size:9px; color:var(--dim); letter-spacing:1.5px; margin-bottom:10px; }
 
-/* Área do organograma em si — ocupa todo espaço restante */
-.arch-body {
-  flex:1; min-height:0;
-  display:grid;
-  grid-template-columns: 1fr 28px 1fr 28px 1fr 28px 1fr;
-  grid-template-rows: 1fr;
-  gap:0; align-items:stretch;
-}
-
-/* ── CAMADAS (colunas ímpares) ── */
+/* CAMADA — container visual */
 .layer {
-  background:rgba(255,255,255,.016); border:1px solid rgba(255,255,255,.06);
-  border-radius:10px; padding:6px 8px;
-  display:flex; flex-direction:column; gap:4px; min-height:0; overflow:hidden;
+  position:relative;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.06);
+  padding:8px 10px 8px;
+  background:rgba(255,255,255,.014);
+  margin-bottom:0;
 }
 .layer-label {
-  font-family:var(--mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
-  padding:3px 8px; border-radius:3px; display:inline-flex; align-items:center; gap:4px;
-  flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-family:var(--mono); font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  padding:2px 8px; border-radius:3px; display:inline-flex; align-items:center; gap:5px;
+  margin-bottom:7px;
 }
 .ll-ext    { color:#ff9966; background:rgba(255,100,0,.07); border:1px solid rgba(255,100,0,.25); }
 .ll-cloud  { color:var(--blue);   background:rgba(0,180,255,.07); border:1px solid rgba(0,180,255,.25); }
 .ll-siem   { color:var(--cyan);   background:rgba(0,255,234,.07); border:1px solid rgba(0,255,234,.25); }
 .ll-onprem { color:var(--green);  background:rgba(0,230,118,.07); border:1px solid rgba(0,230,118,.25); }
+.ll-intel  { color:var(--amber);  background:rgba(255,171,0,.07); border:1px solid rgba(255,171,0,.25); }
 
-/* nós dentro de cada camada */
-.layer-nodes { display:flex; flex-direction:column; gap:4px; flex:1; min-height:0; }
+/* Nós da camada */
+.layer-nodes { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
 
-/* ── NÓ ── */
+/* Nó individual */
 .node {
-  background:var(--card); border-radius:8px; border:1px solid var(--border);
-  padding:6px 8px; flex:1; min-height:0;
-  position:relative; overflow:hidden;
-  transition:transform .2s, box-shadow .2s; cursor:default;
-  display:flex; flex-direction:column; justify-content:space-between;
+  background:var(--card); border-radius:10px; border:1px solid var(--border);
+  padding:9px 11px; flex:1; min-width:150px; max-width:260px;
+  position:relative; overflow:hidden; cursor:default;
+  transition:transform .2s, box-shadow .2s;
 }
-.node::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:8px 8px 0 0; }
-.node:hover { transform:translateY(-1px); }
+.node::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; border-radius:10px 10px 0 0; }
+.node:hover { transform:translateY(-2px); }
 
 .node.defender   { border-color:rgba(0,120,212,.45); }
 .node.defender::before   { background:linear-gradient(90deg,#0078d4,#00bcf2); }
-.node.defender:hover     { box-shadow:0 4px 14px rgba(0,120,212,.2); }
+.node.defender:hover     { box-shadow:0 6px 20px rgba(0,120,212,.22); }
 .node.entraid    { border-color:rgba(0,114,198,.45); }
 .node.entraid::before    { background:linear-gradient(90deg,#0072c6,#00bcf2); }
-.node.entraid:hover      { box-shadow:0 4px 14px rgba(0,114,198,.2); }
+.node.entraid:hover      { box-shadow:0 6px 20px rgba(0,114,198,.22); }
 .node.purview    { border-color:rgba(139,87,255,.45); }
 .node.purview::before    { background:linear-gradient(90deg,#8b57ff,#5c2d91); }
-.node.purview:hover      { box-shadow:0 4px 14px rgba(139,87,255,.2); }
-.node.rmm        { border-color:rgba(156,110,255,.45); }
-.node.rmm::before        { background:linear-gradient(90deg,#9c6eff,#6a3fc8); }
-.node.rmm:hover          { box-shadow:0 4px 14px rgba(156,110,255,.2); }
-.node.elastic    { border-color:rgba(0,191,255,.55); background:linear-gradient(135deg,#071e3d,#0d2a4a); }
+.node.purview:hover      { box-shadow:0 6px 20px rgba(139,87,255,.22); }
+.node.elastic    { border-color:rgba(0,191,255,.55); }
 .node.elastic::before    { background:linear-gradient(90deg,#00bfff,#005fa3); }
-.node.elastic:hover      { box-shadow:0 4px 18px rgba(0,191,255,.25); }
+.node.elastic:hover      { box-shadow:0 6px 24px rgba(0,191,255,.28); }
 .node.hive       { border-color:rgba(255,171,0,.45); }
 .node.hive::before       { background:linear-gradient(90deg,#ffab00,#ff6600); }
-.node.hive:hover         { box-shadow:0 4px 14px rgba(255,171,0,.2); }
+.node.hive:hover         { box-shadow:0 6px 20px rgba(255,171,0,.22); }
+.node.sonicwall  { border-color:rgba(255,102,0,.45); }
+.node.sonicwall::before  { background:linear-gradient(90deg,#ff6600,#cc2200); }
+.node.sonicwall:hover    { box-shadow:0 6px 20px rgba(255,102,0,.22); }
 .node.axur       { border-color:rgba(0,230,118,.45); }
 .node.axur::before       { background:linear-gradient(90deg,#00e676,#00897b); }
-.node.axur:hover         { box-shadow:0 4px 14px rgba(0,230,118,.2); }
-.node.sonicwall  { border-color:rgba(255,102,0,.6); }
-.node.sonicwall::before  { background:linear-gradient(90deg,#ff6600,#cc2200); }
-.node.sonicwall:hover    { box-shadow:0 4px 14px rgba(255,102,0,.2); }
+.node.axur:hover         { box-shadow:0 6px 20px rgba(0,230,118,.22); }
+.node.rmm        { border-color:rgba(156,110,255,.45); }
+.node.rmm::before        { background:linear-gradient(90deg,#9c6eff,#6a3fc8); }
+.node.rmm:hover          { box-shadow:0 6px 20px rgba(156,110,255,.22); }
 
-.node-header { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+.node-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
 .node-logo {
-  width:24px; height:24px; flex-shrink:0; border-radius:6px;
+  width:28px; height:28px; flex-shrink:0; border-radius:7px;
   display:flex; align-items:center; justify-content:center;
 }
 .defender  .node-logo { background:rgba(0,120,212,.12); border:1px solid rgba(0,120,212,.3); }
 .entraid   .node-logo { background:rgba(0,114,198,.12); border:1px solid rgba(0,114,198,.3); }
 .purview   .node-logo { background:rgba(139,87,255,.12); border:1px solid rgba(139,87,255,.3); }
-.rmm       .node-logo { background:rgba(156,110,255,.12); border:1px solid rgba(156,110,255,.3); }
 .elastic   .node-logo { background:rgba(0,191,255,.12); border:1px solid rgba(0,191,255,.3); }
 .hive      .node-logo { background:rgba(255,171,0,.12); border:1px solid rgba(255,171,0,.3); }
-.axur      .node-logo { background:rgba(0,230,118,.12); border:1px solid rgba(0,230,118,.3); }
 .sonicwall .node-logo { background:rgba(255,102,0,.12); border:1px solid rgba(255,102,0,.3); }
+.axur      .node-logo { background:rgba(0,230,118,.12); border:1px solid rgba(0,230,118,.3); }
+.rmm       .node-logo { background:rgba(156,110,255,.12); border:1px solid rgba(156,110,255,.3); }
 
-.node-name { font-size:clamp(10px,.85vw,13px); font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.node-sub  { font-family:var(--mono); font-size:clamp(6px,.45vw,7.5px); color:var(--dim); letter-spacing:.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.node-pills { display:flex; flex-wrap:wrap; gap:2px; }
+.node-name { font-size:clamp(11px,1vw,13px); font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.node-sub  { font-family:var(--mono); font-size:clamp(7px,.55vw,8.5px); color:var(--dim); letter-spacing:.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.node-pills { display:flex; flex-wrap:wrap; gap:3px; }
 .npill {
   font-family:var(--mono); font-size:clamp(7px,.48vw,8.5px);
-  padding:2px 5px; border-radius:8px; white-space:nowrap;
+  padding:2px 5px; border-radius:10px; white-space:nowrap;
 }
 .defender  .npill { background:rgba(0,120,212,.1);  color:#4db0f0; border:1px solid rgba(0,120,212,.25); }
 .entraid   .npill { background:rgba(0,114,198,.1);  color:#4db0f0; border:1px solid rgba(0,114,198,.25); }
 .purview   .npill { background:rgba(139,87,255,.1); color:#b88aff; border:1px solid rgba(139,87,255,.25); }
-.rmm       .npill { background:rgba(156,110,255,.1);color:#c0a0ff; border:1px solid rgba(156,110,255,.25); }
 .elastic   .npill { background:rgba(0,191,255,.1);  color:#55ccff; border:1px solid rgba(0,191,255,.25); }
 .hive      .npill { background:rgba(255,171,0,.1);  color:#ffcc55; border:1px solid rgba(255,171,0,.25); }
-.axur      .npill { background:rgba(0,230,118,.1);  color:#55ee99; border:1px solid rgba(0,230,118,.25); }
 .sonicwall .npill { background:rgba(255,102,0,.1);  color:#ff9955; border:1px solid rgba(255,102,0,.25); }
+.axur      .npill { background:rgba(0,230,118,.1);  color:#55ee99; border:1px solid rgba(0,230,118,.25); }
+.rmm       .npill { background:rgba(156,110,255,.1);color:#c0a0ff; border:1px solid rgba(156,110,255,.25); }
 
-/* Badge REDE LOCAL */
-.local-badge {
-  font-family:var(--mono); font-size:6.5px; padding:1px 5px; border-radius:8px;
-  background:rgba(255,102,0,.15); border:1px solid rgba(255,102,0,.4); color:#ff9955;
-  white-space:nowrap; flex-shrink:0;
+/* ── CONECTORES SVG ANIMADOS entre camadas ── */
+.conn-svg-wrap {
+  width:100%; position:relative; overflow:visible;
+  display:flex; justify-content:center; align-items:center;
+}
+.conn-svg-wrap svg { width:100%; display:block; }
+
+/* Linha animada: partícula deslizando */
+.flow-path { fill:none; stroke-width:1.5; opacity:.5; }
+.flow-dot  { opacity:0; }
+
+/* Animações de partículas nos conectores */
+@keyframes flowDown {
+  0%   { offset-distance:0%;   opacity:0; }
+  5%   { opacity:1; }
+  95%  { opacity:1; }
+  100% { offset-distance:100%; opacity:0; }
+}
+@keyframes flowUp {
+  0%   { offset-distance:100%; opacity:0; }
+  5%   { opacity:1; }
+  95%  { opacity:1; }
+  100% { offset-distance:0%;   opacity:0; }
+}
+@keyframes spin       { to{ transform:rotate(360deg); } }
+@keyframes blink      { 0%,100%{opacity:1} 50%{opacity:.3} }
+@keyframes pulse-ring {
+  0%   { box-shadow:0 0 0 0 rgba(0,191,255,.5); }
+  70%  { box-shadow:0 0 0 10px rgba(0,191,255,0); }
+  100% { box-shadow:0 0 0 0 rgba(0,191,255,0); }
+}
+@keyframes siem-rotate { to{ transform:rotate(360deg); } }
+@keyframes siem-pulse  {
+  0%,100%{ box-shadow:0 0 14px rgba(0,191,255,.3); }
+  50%    { box-shadow:0 0 32px rgba(0,191,255,.7); }
 }
 
-/* ── NODO ELASTIC EXPANDIDO ── */
+/* SIEM especial — nó central destacado */
+.layer.layer-siem {
+  background:linear-gradient(135deg,#071e3d 0%,#0a2545 50%,#071e3d 100%);
+  border:1.5px solid rgba(0,180,255,.45);
+  box-shadow:0 0 30px rgba(0,180,255,.1), inset 0 0 30px rgba(0,50,120,.2);
+  overflow:hidden;
+  /* contain:layout — evita que animações internas causem reflow global */
+  contain:layout style;
+}
 .siem-glow-bg {
   position:absolute; top:-50%; left:-50%; width:200%; height:200%;
   background:conic-gradient(from 0deg,transparent 0deg,rgba(0,180,255,.025) 60deg,transparent 120deg);
-  animation:siem-rotate 20s linear infinite; pointer-events:none; will-change:transform;
+  animation:siem-rotate 20s linear infinite;
+  pointer-events:none;
+  will-change:transform;
 }
-.elastic-inner { position:relative; z-index:1; display:flex; gap:10px; align-items:center; height:100%; }
-.elastic-logo-wrap { flex-shrink:0; text-align:center; min-width:52px; }
+.node.elastic {
+  background:linear-gradient(135deg,#071e3d,#0d2a4a);
+  flex:none; width:100%;
+  max-width:100%;
+}
+.elastic-inner { display:flex; gap:14px; align-items:center; position:relative; z-index:1; }
+.elastic-logo-wrap {
+  flex-shrink:0; text-align:center; min-width:64px;
+}
 .elastic-orb {
-  width:36px; height:36px; border-radius:50%; margin:0 auto 3px;
+  width:44px; height:44px; border-radius:50%; margin:0 auto 4px;
   background:radial-gradient(circle,rgba(0,191,255,.22),rgba(0,50,120,.5));
   border:1.5px solid rgba(0,191,255,.55);
   display:flex; align-items:center; justify-content:center;
   animation:siem-pulse 3s ease-in-out infinite;
 }
-.elastic-logo-wrap h3 { font-size:11px; font-weight:800; letter-spacing:2px; color:var(--cyan); }
-.elastic-logo-wrap p  { font-family:var(--mono); font-size:7px; color:var(--dim); letter-spacing:1px; }
+.elastic-logo-wrap h3 { font-size:13px; font-weight:800; letter-spacing:2px; color:var(--cyan); }
+.elastic-logo-wrap p  { font-family:var(--mono); font-size:8px; color:var(--dim); letter-spacing:1px; }
 .elastic-funcs { flex:1; }
-.elastic-funcs h4 { font-family:var(--mono); font-size:7px; letter-spacing:1.5px; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
-.func-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+.elastic-funcs h4 { font-family:var(--mono); font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--dim); margin-bottom:5px; }
+.func-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:4px; }
 .func-cell {
   background:rgba(0,180,255,.06); border:1px solid rgba(0,180,255,.14);
-  border-radius:5px; padding:4px 2px; text-align:center; transition:background .2s;
+  border-radius:6px; padding:5px 3px; text-align:center; transition:background .2s;
 }
 .func-cell:hover { background:rgba(0,180,255,.13); }
-.func-cell .fi { font-size:14px; display:block; margin-bottom:2px; }
-.func-cell .ft { font-family:var(--mono); font-size:8px; color:#7ab8d4; line-height:1.2; }
+.func-cell .fi { font-size:13px; display:block; margin-bottom:2px; }
+.func-cell .ft { font-family:var(--mono); font-size:7px; color:#7ab8d4; line-height:1.2; }
 
-/* ── CONECTORES SVG (colunas pares) ── */
-.conn-col {
-  display:flex; align-items:center; justify-content:center;
-  padding:0 2px;
-}
-.conn-col svg { width:100%; height:100%; overflow:visible; }
-
-/* ── RODAPÉ LEGENDA ── */
+/* Legenda + status rodapé */
 .arch-footer {
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;
-  padding:4px 10px; flex-shrink:0;
-  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.05); border-radius:7px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  padding:6px 12px; margin-top:8px;
+  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.05); border-radius:8px;
 }
-.legend { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-.legend-item { display:flex; align-items:center; gap:4px; font-family:var(--mono); font-size:8.5px; color:var(--dim); }
-.leg-line { width:18px; height:2px; border-radius:1px; }
-.status-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.legend { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.legend-item { display:flex; align-items:center; gap:5px; font-family:var(--mono); font-size:9.5px; color:var(--dim); letter-spacing:.7px; }
+.leg-line { width:20px; height:2px; border-radius:1px; }
+.status-pills { display:flex; gap:8px; flex-wrap:wrap; }
 .st-pill {
-  display:flex; align-items:center; gap:4px;
-  font-family:var(--mono); font-size:8px; color:var(--dim);
-  background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.06); border-radius:20px; padding:2px 8px;
+  display:flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:9px; color:var(--dim);
+  background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.06); border-radius:20px; padding:2px 9px;
 }
+.dot { width:6px; height:6px; border-radius:50%; animation:blink 2s ease-in-out infinite; }
+.dot.g { background:var(--green); box-shadow:0 0 5px var(--green); }
+.dot.b { background:var(--blue);  box-shadow:0 0 5px var(--blue);  animation-delay:.5s; }
+.dot.a { background:var(--amber); box-shadow:0 0 5px var(--amber); animation-delay:1s; }
 
-/* ── UTILITÁRIOS ── */
-.dot { width:5px; height:5px; border-radius:50%; animation:blink 2s ease-in-out infinite; }
-.dot.g { background:var(--green); box-shadow:0 0 4px var(--green); }
-.dot.b { background:var(--blue);  box-shadow:0 0 4px var(--blue); animation-delay:.5s; }
-.dot.a { background:var(--amber); box-shadow:0 0 4px var(--amber); animation-delay:1s; }
-
-@keyframes blink      { 0%,100%{opacity:1} 50%{opacity:.3} }
-@keyframes spin       { to{ transform:rotate(360deg); } }
-@keyframes siem-rotate{ to{ transform:rotate(360deg); } }
-@keyframes siem-pulse {
-  0%,100%{ box-shadow:0 0 12px rgba(0,191,255,.3); }
-  50%    { box-shadow:0 0 26px rgba(0,191,255,.7); }
-}
+/* ══════════════════════════════════════
+   RADAR DE FUNDO ANIMADO
+══════════════════════════════════════ */
 </style>
 </head>
 <body>
 
-<!-- FUNDO -->
-<div id="bg-layer">
+<!-- ══ RADAR DE FUNDO ══ -->
 <svg id="radar-bg" viewBox="-900 -900 1800 1800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
-    <radialGradient id="rg-sweep" cx="0%" cy="50%" r="100%" gradientUnits="objectBoundingBox">
-      <stop offset="0%"   stop-color="#00ffea" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#00b4ff" stop-opacity="0"/>
+    <!-- Gradiente cônico da sombra: nasce opaco logo atrás da linha,
+         decai suavemente por ~120° até transparente.
+         Simulado com múltiplos setores em <g> girante. -->
+    <radialGradient id="rg-line" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
+                    cx="0" cy="0" r="900" fx="0" fy="0">
+      <stop offset="0%"   stop-color="#00ffea" stop-opacity="0.0"/>
+      <stop offset="100%" stop-color="#00ffea" stop-opacity="0.28"/>
     </radialGradient>
   </defs>
+
+  <!-- Anéis concêntricos — bem sutis -->
   <circle cx="0" cy="0" r="150" fill="none" stroke="#00b4ff" stroke-width="0.5" opacity="0.07"/>
   <circle cx="0" cy="0" r="300" fill="none" stroke="#00b4ff" stroke-width="0.5" opacity="0.06"/>
   <circle cx="0" cy="0" r="450" fill="none" stroke="#00b4ff" stroke-width="0.4" opacity="0.05"/>
   <circle cx="0" cy="0" r="600" fill="none" stroke="#00b4ff" stroke-width="0.4" opacity="0.04"/>
   <circle cx="0" cy="0" r="750" fill="none" stroke="#00b4ff" stroke-width="0.3" opacity="0.03"/>
   <circle cx="0" cy="0" r="870" fill="none" stroke="#00b4ff" stroke-width="0.3" opacity="0.02"/>
+
+  <!-- Grupo giratório completo — 22s, bem lento -->
   <g>
-    <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="22s" repeatCount="indefinite"/>
-    <path d="M0,0 L900,0 A900,900 0 0,0 891,-140 Z"  fill="#00d8e8" opacity="0.05"/>
-    <path d="M0,0 L891,-140 A900,900 0 0,0 863,-278 Z" fill="#00c0d8" opacity="0.038"/>
-    <path d="M0,0 L863,-278 A900,900 0 0,0 818,-409 Z" fill="#00aac8" opacity="0.025"/>
-    <path d="M0,0 L818,-409 A900,900 0 0,0 755,-530 Z" fill="#0094b8" opacity="0.015"/>
-    <path d="M0,0 L755,-530 A900,900 0 0,0 675,-636 Z" fill="#007ea8" opacity="0.009"/>
-    <path d="M0,0 L675,-636 A900,900 0 0,0 580,-726 Z" fill="#006898" opacity="0.005"/>
-    <line x1="0" y1="0" x2="900" y2="0" stroke="#00ffea" stroke-width="0.8" opacity="0.4"/>
-    <circle cx="900" cy="0" r="2.5" fill="#00ffea" opacity="0.2"/>
+    <animateTransform attributeName="transform" type="rotate"
+      from="0 0 0" to="360 0 0" dur="22s" repeatCount="indefinite"/>
+
+    <!-- Sombra: 8 fatias de setor, cada uma ~15° atrás da linha,
+         opacidade decrescente — simula decaimento tipo phosphor -->
+    <!-- fatia 1: logo atrás — mais opaca -->
+    <path d="M0,0 L900,0 A900,900 0 0,0 891,-140 Z"  fill="#00d8e8" opacity="0.055"/>
+    <!-- fatia 2 -->
+    <path d="M0,0 L891,-140 A900,900 0 0,0 863,-278 Z" fill="#00c0d8" opacity="0.042"/>
+    <!-- fatia 3 -->
+    <path d="M0,0 L863,-278 A900,900 0 0,0 818,-409 Z" fill="#00aac8" opacity="0.030"/>
+    <!-- fatia 4 -->
+    <path d="M0,0 L818,-409 A900,900 0 0,0 755,-530 Z" fill="#0094b8" opacity="0.020"/>
+    <!-- fatia 5 -->
+    <path d="M0,0 L755,-530 A900,900 0 0,0 675,-636 Z" fill="#007ea8" opacity="0.013"/>
+    <!-- fatia 6 -->
+    <path d="M0,0 L675,-636 A900,900 0 0,0 580,-726 Z" fill="#0068a0" opacity="0.007"/>
+    <!-- fatia 7 — apagando -->
+    <path d="M0,0 L580,-726 A900,900 0 0,0 471,-795 Z" fill="#005090" opacity="0.004"/>
+    <!-- fatia 8 — quase invisível -->
+    <path d="M0,0 L471,-795 A900,900 0 0,0 350,-846 Z" fill="#003878" opacity="0.002"/>
+
+    <!-- Linha de varredura principal — fina, luminosa -->
+    <line x1="0" y1="0" x2="900" y2="0"
+          stroke="#00ffea" stroke-width="0.9" opacity="0.45"/>
+
+    <!-- Leve brilho extra na ponta da linha -->
+    <circle cx="900" cy="0" r="3" fill="#00ffea" opacity="0.25"/>
   </g>
 </svg>
-</div>
 
-<!-- PÁGINA PRINCIPAL -->
 <div class="page">
 
-  <!-- ══ LINHA 1: CLIMA + EQUIPE ══ -->
-  <div class="row1">
+  <!-- ══════════════════════════════════
+       DIVISOR — CLIMA
+  ══════════════════════════════════ -->
+  <div class="section-divider">
+    <span class="sdl weather">🌤 Condições Climáticas</span>
+  </div>
 
-    <!-- CLIMA -->
-    <div class="section-block">
-      <div class="section-header">
-        <span class="sdiv weather">🌤 Condições Climáticas</span>
-        <span class="sdiv-line"></span>
+  <!-- BLOCO 1 — CLIMA -->
+  <div class="weather-row" id="weatherRow"></div>
+
+  <!-- ══════════════════════════════════
+       DIVISOR — EQUIPE
+  ══════════════════════════════════ -->
+  <div class="section-divider">
+    <span class="sdl team">👥 Equipe de Segurança da Informação</span>
+  </div>
+
+  <!-- BLOCO 2 — EQUIPE -->
+  <div>
+    <div class="team-hdr">
+      <div>
+        <div class="team-title">Equipe de S.I</div>
+        <div class="team-sub">// SEGURANÇA DA INFORMAÇÃO — MEMBROS ATIVOS //</div>
       </div>
-      <div class="weather-wrap" id="weatherRow"></div>
+      <div class="team-pill">
+        <div class="dot g"></div>
+        <span id="memberCount">5 membros</span>
+      </div>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       DIVISOR — LINKS RÁPIDOS
+  ══════════════════════════════════ -->
+  <div class="section-divider">
+    <span class="sdl menu">⚡ Links Rápidos</span>
+  </div>
+
+  <!-- BLOCO 3 — MENU RÁPIDO -->
+  <div class="menu-row">
+
+    <div class="menu-group">
+      <div class="menu-lbl">📊 Painéis e Relatórios</div>
+      <a href="https://ernestoborges.reportload.com/10489/reports" target="_blank" class="menu-link">
+        <div class="mi-ico">📈</div><div><div class="mi-title">Painéis de S.I</div><div class="mi-desc">Métricas e indicadores</div></div><span class="mi-arr">›</span>
+      </a>
+      <a href="https://ernestoborges.sharepoint.com/sites/Portalintranet/Segurana%20da%20informao/Forms/AllItems.aspx" target="_blank" class="menu-link">
+        <div class="mi-ico">📁</div><div><div class="mi-title">Documentos S.I</div><div class="mi-desc">Políticas e documentação</div></div><span class="mi-arr">›</span>
+      </a>
     </div>
 
-    <!-- EQUIPE -->
-    <div class="section-block">
-      <div class="section-header">
-        <span class="sdiv team">👥 Equipe de S.I</span>
-        <span class="sdiv-line"></span>
-        <div class="team-pill">
-          <div class="dot g"></div>
-          <span id="memberCount">5 membros</span>
+    <div class="menu-group">
+      <div class="menu-lbl">🔵 Microsoft</div>
+      <a href="https://purview.microsoft.com/" target="_blank" class="menu-link">
+        <div class="mi-ico">🔍</div><div><div class="mi-title">Microsoft Purview</div><div class="mi-desc">Governança e conformidade</div></div><span class="mi-arr">›</span>
+      </a>
+      <a href="https://entra.microsoft.com/" target="_blank" class="menu-link">
+        <div class="mi-ico">🆔</div><div><div class="mi-title">Microsoft Entra ID</div><div class="mi-desc">Gerenciamento de identidades</div></div><span class="mi-arr">›</span>
+      </a>
+      <a href="https://security.microsoft.com/" target="_blank" class="menu-link">
+        <div class="mi-ico">🛡️</div><div><div class="mi-title">Microsoft Defender</div><div class="mi-desc">Proteção contra ameaças</div></div><span class="mi-arr">›</span>
+      </a>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-lbl">🔒 Ferramentas de Segurança</div>
+      <a href="https://cloud.elastic.co/home" target="_blank" class="menu-link">
+        <div class="mi-ico">⚡</div><div><div class="mi-title">Elastic SIEM</div><div class="mi-desc">Monitoramento e correlação</div></div><span class="mi-arr">›</span>
+      </a>
+      <a href="https://id.axur.com/" target="_blank" class="menu-link">
+        <div class="mi-ico">🌐</div><div><div class="mi-title">Axur One</div><div class="mi-desc">Ameaças digitais externas</div></div><span class="mi-arr">›</span>
+      </a>
+      <a href="https://sso.navigatorlogin.com/" target="_blank" class="menu-link">
+        <div class="mi-ico">🔐</div><div><div class="mi-title">RMM</div><div class="mi-desc">Gerenciamento remoto</div></div><span class="mi-arr">›</span>
+      </a>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-lbl">📋 Conformidade</div>
+      <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=x-z2c2_YV0OHi7ncf07gYWPSLe5KOphPh_BDQslvaSdUQ0tMRlAzT0dZM0xENUs3R0hLQk1GQTZGQi4u" target="_blank" class="menu-link">
+        <div class="mi-ico">⚠️</div><div><div class="mi-title">Registro de Risco</div><div class="mi-desc">Reporte riscos de segurança</div></div><span class="mi-arr">›</span>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════
+       DIVISOR — ARQUITETURA
+  ══════════════════════════════════ -->
+  <div class="section-divider">
+    <span class="sdl arch">🏛 Arquitetura de Cybersegurança</span>
+  </div>
+
+  <!-- BLOCO 4 — ARQUITETURA EM CAMADAS -->
+  <div class="arch-wrapper">
+    <div class="arch-section-title">Arquitetura de Cybersegurança</div>
+    <div class="arch-section-sub">// ORGANOGRAMA DE INTEGRAÇÃO — 4 CAMADAS — PERÍMETRO → NUVEM → SIEM → RESPOSTA SOC //</div>
+
+    <!-- CAMADA 0: AMEAÇAS EXTERNAS (topo) -->
+    <div class="layer">
+      <span class="layer-label ll-ext">🌍 Superfície de Ameaças — Externas e Perímetro Local</span>
+      <div class="layer-nodes">
+        <div class="node axur">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="12" stroke="#00e676" stroke-width="1.5" fill="none" opacity=".5"/>
+                <circle cx="16" cy="16" r="7" stroke="#00e676" stroke-width="1" fill="none" opacity=".3"/>
+                <path d="M4 16h24M16 4v24" stroke="#00e676" stroke-width=".8" opacity=".4"/>
+                <circle cx="16" cy="16" r="3" fill="#00e676"/>
+                <circle cx="23" cy="9" r="2" fill="#ff5252" opacity=".9"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#55ee99;">Axur One</div><div class="node-sub">INTELIGÊNCIA DE AMEAÇAS EXTERNAS</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">Monitoramento de Marca</span><span class="npill">Detecção de Phishing</span>
+            <span class="npill">Dark Web</span><span class="npill">Typosquatting</span>
+            <span class="npill">Feeds de IOC</span><span class="npill">Takedown</span>
+          </div>
         </div>
-      </div>
-      <div class="team-grid" id="teamGrid"></div>
-    </div>
-
-  </div><!-- /row1 -->
-
-  <!-- ══ LINHA 2: LINKS RÁPIDOS ══ -->
-  <div class="row2">
-    <div class="section-header">
-      <span class="sdiv menu">⚡ Links Rápidos</span>
-      <span class="sdiv-line"></span>
-    </div>
-    <div class="menu-row">
-
-      <div class="menu-group">
-        <div class="menu-lbl">📊 Painéis e Relatórios</div>
-        <a href="https://ernestoborges.reportload.com/10489/reports" target="_blank" class="menu-link">
-          <div class="mi-ico">📈</div><div><div class="mi-title">Painéis de S.I</div><div class="mi-desc">Métricas e indicadores</div></div><span class="mi-arr">›</span>
-        </a>
-        <a href="https://ernestoborges.sharepoint.com/sites/Portalintranet/Segurana%20da%20informao/Forms/AllItems.aspx" target="_blank" class="menu-link">
-          <div class="mi-ico">📁</div><div><div class="mi-title">Documentos S.I</div><div class="mi-desc">Políticas e documentação</div></div><span class="mi-arr">›</span>
-        </a>
-      </div>
-
-      <div class="menu-group">
-        <div class="menu-lbl">🔵 Microsoft</div>
-        <a href="https://purview.microsoft.com/" target="_blank" class="menu-link">
-          <div class="mi-ico">🔍</div><div><div class="mi-title">Microsoft Purview</div><div class="mi-desc">Governança e conformidade</div></div><span class="mi-arr">›</span>
-        </a>
-        <a href="https://entra.microsoft.com/" target="_blank" class="menu-link">
-          <div class="mi-ico">🆔</div><div><div class="mi-title">Microsoft Entra ID</div><div class="mi-desc">Gerenciamento de identidades</div></div><span class="mi-arr">›</span>
-        </a>
-        <a href="https://security.microsoft.com/" target="_blank" class="menu-link">
-          <div class="mi-ico">🛡️</div><div><div class="mi-title">Microsoft Defender</div><div class="mi-desc">Proteção contra ameaças</div></div><span class="mi-arr">›</span>
-        </a>
-      </div>
-
-      <div class="menu-group">
-        <div class="menu-lbl">🔒 Ferramentas de Segurança</div>
-        <a href="https://cloud.elastic.co/home" target="_blank" class="menu-link">
-          <div class="mi-ico">⚡</div><div><div class="mi-title">Elastic SIEM</div><div class="mi-desc">Monitoramento e correlação</div></div><span class="mi-arr">›</span>
-        </a>
-        <a href="https://id.axur.com/" target="_blank" class="menu-link">
-          <div class="mi-ico">🌐</div><div><div class="mi-title">Axur One</div><div class="mi-desc">Ameaças digitais externas</div></div><span class="mi-arr">›</span>
-        </a>
-        <a href="https://sso.navigatorlogin.com/" target="_blank" class="menu-link">
-          <div class="mi-ico">🔐</div><div><div class="mi-title">RMM</div><div class="mi-desc">Gerenciamento remoto</div></div><span class="mi-arr">›</span>
-        </a>
-      </div>
-
-      <div class="menu-group">
-        <div class="menu-lbl">📋 Conformidade</div>
-        <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=x-z2c2_YV0OHi7ncf07gYWPSLe5KOphPh_BDQslvaSdUQ0tMRlAzT0dZM0xENUs3R0hLQk1GQTZGQi4u" target="_blank" class="menu-link">
-          <div class="mi-ico">⚠️</div><div><div class="mi-title">Registro de Risco</div><div class="mi-desc">Reporte riscos de segurança</div></div><span class="mi-arr">›</span>
-        </a>
-      </div>
-
-    </div>
-  </div><!-- /row2 -->
-
-  <!-- ══ LINHA 3: ARQUITETURA ══ -->
-  <div class="row3">
-
-    <div class="section-header" style="flex-shrink:0;">
-      <span class="sdiv arch">🏛 Arquitetura de Cybersegurança</span>
-      <span class="sdiv-line"></span>
-      <div class="st-pill"><div class="dot g"></div>Sistemas OK</div>
-      <div class="st-pill"><div class="dot b"></div>Logs Ativos</div>
-      <div class="st-pill"><div class="dot a"></div>Feed Ameaças</div>
-    </div>
-
-    <!-- ORGANOGRAMA HORIZONTAL: 4 camadas + 3 conectores -->
-    <div class="arch-body">
-
-      <!-- CAMADA 0: AMEAÇAS / PERÍMETRO -->
-      <div class="layer" style="border-color:rgba(255,100,0,.18);">
-        <span class="layer-label ll-ext">🌍 Ameaças — Externas e Perímetro</span>
-        <div class="layer-nodes">
-
-          <div class="node axur">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <circle cx="16" cy="16" r="12" stroke="#00e676" stroke-width="1.5" fill="none" opacity=".5"/>
-                  <circle cx="16" cy="16" r="7"  stroke="#00e676" stroke-width="1"   fill="none" opacity=".3"/>
-                  <path d="M4 16h24M16 4v24" stroke="#00e676" stroke-width=".8" opacity=".4"/>
-                  <circle cx="16" cy="16" r="3" fill="#00e676"/>
-                  <circle cx="23" cy="9"  r="2" fill="#ff5252" opacity=".9"/>
-                </svg>
-              </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#55ee99;">Axur One</div>
-                <div class="node-sub">INTEL. DE AMEAÇAS EXTERNAS</div>
-              </div>
+        <div class="node sonicwall" style="border-color:rgba(255,102,0,.6); box-shadow:0 0 12px rgba(255,102,0,.12);">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <rect x="4" y="10" width="24" height="14" rx="3" fill="#ff6600" opacity=".3" stroke="#ff6600" stroke-width="1.5"/>
+                <rect x="7" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
+                <rect x="13" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
+                <rect x="19" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
+                <path d="M16 4v6M12 4l4 6 4-6" stroke="#ff6600" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="24" cy="11" r="3" fill="#00e676"/>
+              </svg>
             </div>
-            <div class="node-pills">
-              <span class="npill">Monit. de Marca</span><span class="npill">Phishing</span>
-              <span class="npill">Dark Web</span><span class="npill">IOC Feeds</span>
-              <span class="npill">Typosquatting</span><span class="npill">Takedown</span>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <div class="node-name" style="color:#ff9955;">SonicWall NGFW</div>
+                <span style="font-family:var(--mono);font-size:7.5px;padding:1px 6px;border-radius:10px;background:rgba(255,102,0,.15);border:1px solid rgba(255,102,0,.4);color:#ff9955;white-space:nowrap;">🏠 REDE LOCAL</span>
+              </div>
+              <div class="node-sub">FIREWALL DE PRÓXIMA GERAÇÃO — PERÍMETRO ON-PREMISES</div>
             </div>
           </div>
-
-          <div class="node sonicwall">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="10" width="24" height="14" rx="3" fill="#ff6600" opacity=".3" stroke="#ff6600" stroke-width="1.5"/>
-                  <rect x="7" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                  <rect x="13" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                  <rect x="19" y="13" width="4" height="2" rx="1" fill="#ff8800"/>
-                  <path d="M16 4v6M12 4l4 6 4-6" stroke="#ff6600" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="24" cy="11" r="3" fill="#00e676"/>
-                </svg>
-              </div>
-              <div style="min-width:0; flex:1;">
-                <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-                  <div class="node-name" style="color:#ff9955;">SonicWall NGFW</div>
-                  <span class="local-badge">🏠 REDE LOCAL</span>
-                </div>
-                <div class="node-sub">FIREWALL — PERÍMETRO ON-PREMISES</div>
-              </div>
-            </div>
-            <div class="node-pills">
-              <span class="npill">DPI / IPS / IDS</span><span class="npill">VPN SSL/IPSec</span>
-              <span class="npill">Filtragem Web</span><span class="npill">Bloqueio Geo</span>
-              <span class="npill">Segmentação</span><span class="npill">Anti-Malware GW</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- CONECTOR 1 -->
-      <div class="conn-col">
-        <svg viewBox="0 0 28 100" preserveAspectRatio="none">
-          <defs>
-            <marker id="a1" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-              <polygon points="0 0,5 2.5,0 5" fill="#00b4ff" opacity=".7"/>
-            </marker>
-            <marker id="a1g" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-              <polygon points="0 0,5 2.5,0 5" fill="#ff8844" opacity=".7"/>
-            </marker>
-          </defs>
-          <line x1="14" y1="28" x2="14" y2="72" stroke="#ff8844" stroke-width="1.2" stroke-dasharray="3 2" opacity=".5" marker-end="url(#a1g)"/>
-          <circle r="2.5" fill="#ff8844" opacity=".8"><animateMotion dur="1.6s" repeatCount="indefinite" begin="0s" path="M14,28 L14,72"/></circle>
-          <text x="16" y="52" font-family="'Share Tech Mono',monospace" font-size="5.5" fill="#ff9955" opacity=".6" letter-spacing=".3">LOGS</text>
-          <text x="16" y="60" font-family="'Share Tech Mono',monospace" font-size="5.5" fill="#55ee99" opacity=".6" letter-spacing=".3">IOC</text>
-        </svg>
-      </div>
-
-      <!-- CAMADA 1: NUVEM -->
-      <div class="layer" style="border-color:rgba(0,180,255,.14);">
-        <span class="layer-label ll-cloud">☁ Nuvem — Microsoft 365 / Azure</span>
-        <div class="layer-nodes">
-
-          <div class="node defender">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <path d="M16 2L4 7v10c0 7.5 5.2 13.3 12 15 6.8-1.7 12-7.5 12-15V7L16 2z" fill="#0078d4" opacity=".9"/>
-                  <path d="M16 4L6 8.5V17c0 6 4.2 10.7 10 12.4C21.8 27.7 26 23 26 17V8.5L16 4z" fill="#00bcf2" opacity=".7"/>
-                  <path d="M11 16l3.5 3.5L21 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#4db8ff;">Microsoft Defender</div>
-                <div class="node-sub">ENDPOINT & NUVEM / XDR</div>
-              </div>
-            </div>
-            <div class="node-pills">
-              <span class="npill">EDR</span><span class="npill">Defender Nuvem</span><span class="npill">Antivírus</span><span class="npill">XDR</span>
-            </div>
-          </div>
-
-          <div class="node entraid">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <path d="M16 3L3 9.5V22.5L16 29L29 22.5V9.5L16 3Z" fill="#0072c6" opacity=".3" stroke="#0072c6" stroke-width="1.5"/>
-                  <circle cx="16" cy="13" r="4" fill="#00bcf2"/>
-                  <path d="M8 24c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#00bcf2" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#4db8ff;">Microsoft Entra ID</div>
-                <div class="node-sub">IDENTIDADE & ACESSO (IAM)</div>
-              </div>
-            </div>
-            <div class="node-pills">
-              <span class="npill">SSO/MFA</span><span class="npill">Acesso Condicional</span><span class="npill">PIM</span><span class="npill">RBAC</span>
-            </div>
-          </div>
-
-          <div class="node purview">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="4" width="10" height="10" rx="2" fill="#8b57ff" opacity=".8"/>
-                  <rect x="18" y="4" width="10" height="10" rx="2" fill="#5c2d91" opacity=".8"/>
-                  <rect x="4" y="18" width="10" height="10" rx="2" fill="#5c2d91" opacity=".8"/>
-                  <rect x="18" y="18" width="10" height="10" rx="2" fill="#8b57ff" opacity=".8"/>
-                  <circle cx="16" cy="16" r="3.5" fill="white" opacity=".9"/>
-                </svg>
-              </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#b88aff;">Microsoft Purview</div>
-                <div class="node-sub">GOVERNANÇA & CONFORMIDADE</div>
-              </div>
-            </div>
-            <div class="node-pills">
-              <span class="npill">DLP</span><span class="npill">Classificação</span><span class="npill">eDiscovery</span><span class="npill">Auditoria</span>
-            </div>
-          </div>
-
-          <div class="node rmm">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <rect x="3" y="5" width="26" height="17" rx="2" fill="#9c6eff" opacity=".2" stroke="#9c6eff" stroke-width="1.5"/>
-                  <path d="M10 28h12M16 22v6" stroke="#9c6eff" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="10" cy="13" r="2" fill="#9c6eff"/>
-                  <circle cx="16" cy="13" r="2" fill="#c0a0ff"/>
-                  <circle cx="22" cy="13" r="2" fill="#9c6eff" opacity=".6"/>
-                </svg>
-              </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#c0a0ff;">RMM</div>
-                <div class="node-sub">GERENCIAMENTO REMOTO</div>
-              </div>
-            </div>
-            <div class="node-pills">
-              <span class="npill">Monitoramento</span><span class="npill">Acesso Remoto</span><span class="npill">Patch</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- CONECTOR 2 -->
-      <div class="conn-col">
-        <svg viewBox="0 0 28 100" preserveAspectRatio="none">
-          <defs>
-            <marker id="a2" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-              <polygon points="0 0,5 2.5,0 5" fill="#00b4ff" opacity=".7"/>
-            </marker>
-          </defs>
-          <line x1="14" y1="15" x2="14" y2="85" stroke="#00b4ff" stroke-width="1.2" stroke-dasharray="3 2" opacity=".45" marker-end="url(#a2)"/>
-          <circle r="2.5" fill="#0078d4" opacity=".8"><animateMotion dur="1.4s" repeatCount="indefinite" begin="0s"   path="M14,15 L14,85"/></circle>
-          <circle r="2.5" fill="#0072c6" opacity=".8"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".35s" path="M14,15 L14,85"/></circle>
-          <circle r="2.5" fill="#8b57ff" opacity=".8"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".7s"  path="M14,15 L14,85"/></circle>
-          <text x="16" y="48" font-family="'Share Tech Mono',monospace" font-size="5" fill="#4db0f0" opacity=".6" letter-spacing=".2">ALERTAS</text>
-          <text x="16" y="55" font-family="'Share Tech Mono',monospace" font-size="5" fill="#4db0f0" opacity=".6" letter-spacing=".2">LOGS</text>
-          <text x="16" y="62" font-family="'Share Tech Mono',monospace" font-size="5" fill="#b88aff" opacity=".6" letter-spacing=".2">DLP</text>
-        </svg>
-      </div>
-
-      <!-- CAMADA 2: SIEM (núcleo) -->
-      <div class="layer" style="background:linear-gradient(135deg,#071e3d 0%,#0a2545 50%,#071e3d 100%); border:1.5px solid rgba(0,180,255,.45); box-shadow:0 0 24px rgba(0,180,255,.08),inset 0 0 24px rgba(0,50,120,.2); overflow:hidden; contain:layout style;">
-        <div class="siem-glow-bg"></div>
-        <span class="layer-label ll-siem" style="position:relative;z-index:1;">⬡ NÚCLEO — SIEM / XDR</span>
-        <div class="layer-nodes" style="position:relative;z-index:1;">
-          <div class="node elastic" style="flex:1;">
-            <div class="elastic-inner">
-              <div class="elastic-logo-wrap">
-                <div class="elastic-orb">
-                  <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-                    <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#00bfff" stroke-width="5" opacity=".8"/>
-                    <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#005fa3" stroke-width="5" transform="rotate(60 50 50)" opacity=".8"/>
-                    <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#00e5ff" stroke-width="5" transform="rotate(120 50 50)" opacity=".8"/>
-                    <circle cx="50" cy="50" r="10" fill="#00bfff"/>
-                  </svg>
-                </div>
-                <h3>ELASTIC</h3><p>SIEM / XDR</p>
-              </div>
-              <div class="elastic-funcs">
-                <h4>// Funções</h4>
-                <div class="func-grid">
-                  <div class="func-cell"><span class="fi">📥</span><span class="ft">Coleta</span></div>
-                  <div class="func-cell"><span class="fi">⚙️</span><span class="ft">Processo</span></div>
-                  <div class="func-cell"><span class="fi">🗄️</span><span class="ft">Armazena</span></div>
-                  <div class="func-cell"><span class="fi">🔗</span><span class="ft">Correlação</span></div>
-                  <div class="func-cell"><span class="fi">🚨</span><span class="ft">Alertas</span></div>
-                  <div class="func-cell"><span class="fi">📊</span><span class="ft">Dashboards</span></div>
-                  <div class="func-cell"><span class="fi">🛡️</span><span class="ft">Detecção</span></div>
-                  <div class="func-cell"><span class="fi">📋</span><span class="ft">Incidentes</span></div>
-                </div>
-              </div>
-            </div>
+          <div class="node-pills">
+            <span class="npill">Firewall de Próxima Geração</span>
+            <span class="npill">Inspeção Profunda (DPI)</span>
+            <span class="npill">IPS / IDS</span>
+            <span class="npill">VPN SSL / IPSec</span>
+            <span class="npill">Filtragem de Conteúdo Web</span>
+            <span class="npill">Bloqueio por Geolocalização</span>
+            <span class="npill">Segmentação de Rede</span>
+            <span class="npill">Anti-Malware de Gateway</span>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- CONECTOR 3 -->
-      <div class="conn-col">
-        <svg viewBox="0 0 28 100" preserveAspectRatio="none">
-          <defs>
-            <marker id="a3" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-              <polygon points="0 0,5 2.5,0 5" fill="#ffab00" opacity=".8"/>
-            </marker>
-          </defs>
-          <line x1="14" y1="15" x2="14" y2="85" stroke="#ffab00" stroke-width="1.2" stroke-dasharray="3 2" opacity=".45" marker-end="url(#a3)"/>
-          <circle r="2.5" fill="#ffab00" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin="0s"   path="M14,15 L14,85"/></circle>
-          <circle r="2.5" fill="#ff8800" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".7s"  path="M14,15 L14,85"/></circle>
-          <text x="16" y="46" font-family="'Share Tech Mono',monospace" font-size="5" fill="#ffcc55" opacity=".65" letter-spacing=".2">CASOS</text>
-          <text x="16" y="54" font-family="'Share Tech Mono',monospace" font-size="5" fill="#55ee99" opacity=".65" letter-spacing=".2">IOC</text>
-        </svg>
+    <!-- CONECTOR ANIMADO: Ext → Nuvem -->
+    <div class="conn-svg-wrap" id="conn0" style="height:38px;">
+      <svg id="svg0" viewBox="0 0 800 38" preserveAspectRatio="none" style="height:38px;">
+        <!-- Linha principal central descendo -->
+        <line id="p0l0" x1="200" y1="0" x2="200" y2="38" class="flow-path" stroke="#ff6611"/>
+        <line id="p0l1" x1="400" y1="0" x2="400" y2="38" class="flow-path" stroke="#ff6611"/>
+        <line id="p0l2" x1="600" y1="0" x2="600" y2="38" class="flow-path" stroke="#00e676"/>
+        <!-- Labels -->
+        <text x="215" y="20" font-family="'Share Tech Mono',monospace" font-size="7" fill="#ff8844" opacity=".7" letter-spacing="1">TELEMETRIA DE REDE</text>
+        <text x="415" y="20" font-family="'Share Tech Mono',monospace" font-size="7" fill="#ff8844" opacity=".7" letter-spacing="1">LOGS FIREWALL</text>
+        <text x="615" y="20" font-family="'Share Tech Mono',monospace" font-size="7" fill="#55ee99" opacity=".7" letter-spacing="1">FEEDS IOC</text>
+        <!-- Partículas animadas -->
+        <circle r="3" fill="#ff8844">
+          <animateMotion dur="1.8s" repeatCount="indefinite" begin="0s">
+            <mpath href="#p0l0-path"/>
+          </animateMotion>
+        </circle>
+        <!-- setas -->
+        <polygon points="197,34 200,38 203,34" fill="#ff8844" opacity=".8"/>
+        <polygon points="397,34 400,38 403,34" fill="#ff8844" opacity=".8"/>
+        <polygon points="597,34 600,38 603,34" fill="#55ee99" opacity=".8"/>
+      </svg>
+    </div>
+
+    <!-- CAMADA 1: NUVEM -->
+    <div class="layer">
+      <span class="layer-label ll-cloud">☁ Nuvem — Microsoft 365 / Azure</span>
+      <div class="layer-nodes">
+
+        <div class="node defender">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <path d="M16 2L4 7v10c0 7.5 5.2 13.3 12 15 6.8-1.7 12-7.5 12-15V7L16 2z" fill="#0078d4" opacity=".9"/>
+                <path d="M16 4L6 8.5V17c0 6 4.2 10.7 10 12.4C21.8 27.7 26 23 26 17V8.5L16 4z" fill="#00bcf2" opacity=".7"/>
+                <path d="M11 16l3.5 3.5L21 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#4db8ff;">Microsoft Defender</div><div class="node-sub">ENDPOINT & NUVEM / XDR</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">Endpoint EDR</span><span class="npill">Defender para Nuvem</span>
+            <span class="npill">Antivírus</span><span class="npill">Caça a Ameaças</span><span class="npill">Integração XDR</span>
+          </div>
+        </div>
+
+        <div class="node entraid">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <path d="M16 3L3 9.5V22.5L16 29L29 22.5V9.5L16 3Z" fill="#0072c6" opacity=".3" stroke="#0072c6" stroke-width="1.5"/>
+                <circle cx="16" cy="13" r="4" fill="#00bcf2"/>
+                <path d="M8 24c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#00bcf2" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#4db8ff;">Microsoft Entra ID</div><div class="node-sub">IDENTIDADE & ACESSO (IAM)</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">SSO / MFA</span><span class="npill">Acesso Condicional</span>
+            <span class="npill">PIM</span><span class="npill">Proteção de Identidade</span><span class="npill">RBAC</span>
+          </div>
+        </div>
+
+        <div class="node purview">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <rect x="4" y="4" width="10" height="10" rx="2" fill="#8b57ff" opacity=".8"/>
+                <rect x="18" y="4" width="10" height="10" rx="2" fill="#5c2d91" opacity=".8"/>
+                <rect x="4" y="18" width="10" height="10" rx="2" fill="#5c2d91" opacity=".8"/>
+                <rect x="18" y="18" width="10" height="10" rx="2" fill="#8b57ff" opacity=".8"/>
+                <circle cx="16" cy="16" r="3.5" fill="white" opacity=".9"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#b88aff;">Microsoft Purview</div><div class="node-sub">GOVERNANÇA & CONFORMIDADE</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">DLP</span><span class="npill">Proteção da Informação</span>
+            <span class="npill">Classificação</span><span class="npill">eDiscovery</span><span class="npill">Auditoria</span>
+          </div>
+        </div>
+
+        <div class="node rmm">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <rect x="3" y="5" width="26" height="17" rx="2" fill="#9c6eff" opacity=".2" stroke="#9c6eff" stroke-width="1.5"/>
+                <path d="M10 28h12M16 22v6" stroke="#9c6eff" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="10" cy="13" r="2" fill="#9c6eff"/>
+                <circle cx="16" cy="13" r="2" fill="#c0a0ff"/>
+                <circle cx="22" cy="13" r="2" fill="#9c6eff" opacity=".6"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#c0a0ff;">RMM</div><div class="node-sub">GERENCIAMENTO REMOTO DE ENDPOINTS</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">Monitoramento</span><span class="npill">Acesso Remoto</span>
+            <span class="npill">Patch Mgmt</span><span class="npill">Inventário</span>
+          </div>
+        </div>
+
       </div>
+    </div>
 
-      <!-- CAMADA 3: RESPOSTA SOC -->
-      <div class="layer" style="border-color:rgba(0,230,118,.14);">
-        <span class="layer-label ll-onprem">🖥 On-Premise — Resposta SOC</span>
-        <div class="layer-nodes">
-          <div class="node hive" style="flex:1;">
-            <div class="node-header">
-              <div class="node-logo">
-                <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-                  <path d="M16 2l4.3 7.5H11.7L16 2z" fill="#ffab00"/>
-                  <path d="M16 30l-4.3-7.5h8.6L16 30z" fill="#ff8800"/>
-                  <path d="M8.5 9.5h15l2.6 4.5-2.6 4.5h-15l-2.6-4.5 2.6-4.5z" fill="#ffab00" opacity=".3" stroke="#ffab00" stroke-width="1"/>
-                  <circle cx="16" cy="14" r="3" fill="#ffab00"/>
+    <!-- CONECTOR ANIMADO: Nuvem → SIEM -->
+    <div class="conn-svg-wrap" style="height:44px;">
+      <svg viewBox="0 0 800 44" preserveAspectRatio="none" style="height:44px;">
+        <defs>
+          <marker id="arr-blue" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <polygon points="0 0,6 3,0 6" fill="#00b4ff" opacity=".8"/>
+          </marker>
+          <marker id="arr-purple" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <polygon points="0 0,6 3,0 6" fill="#9c6eff" opacity=".8"/>
+          </marker>
+        </defs>
+        <!-- 4 linhas convergindo ao centro -->
+        <line x1="100" y1="0" x2="400" y2="44" stroke="#0078d4" stroke-width="1.2" stroke-dasharray="4 3" opacity=".5" marker-end="url(#arr-blue)"/>
+        <line x1="267" y1="0" x2="400" y2="44" stroke="#0072c6" stroke-width="1.2" stroke-dasharray="4 3" opacity=".5" marker-end="url(#arr-blue)"/>
+        <line x1="533" y1="0" x2="400" y2="44" stroke="#8b57ff" stroke-width="1.2" stroke-dasharray="4 3" opacity=".5" marker-end="url(#arr-purple)"/>
+        <line x1="700" y1="0" x2="400" y2="44" stroke="#9c6eff" stroke-width="1.2" stroke-dasharray="4 3" opacity=".5" marker-end="url(#arr-purple)"/>
+        <!-- Partículas animadas por cada linha -->
+        <circle r="3" fill="#0078d4" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin="0s" path="M100,0 L400,44"/></circle>
+        <circle r="3" fill="#0072c6" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".35s" path="M267,0 L400,44"/></circle>
+        <circle r="3" fill="#8b57ff" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".7s" path="M533,0 L400,44"/></circle>
+        <circle r="3" fill="#9c6eff" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin="1.05s" path="M700,0 L400,44"/></circle>
+        <!-- Labels flutuantes -->
+        <text x="60"  y="14" font-family="'Share Tech Mono',monospace" font-size="7" fill="#4db0f0" opacity=".65" letter-spacing=".5">Alertas/Telemetria</text>
+        <text x="220" y="14" font-family="'Share Tech Mono',monospace" font-size="7" fill="#4db0f0" opacity=".65" letter-spacing=".5">Logs de Auth</text>
+        <text x="490" y="14" font-family="'Share Tech Mono',monospace" font-size="7" fill="#b88aff" opacity=".65" letter-spacing=".5">Eventos DLP</text>
+        <text x="640" y="14" font-family="'Share Tech Mono',monospace" font-size="7" fill="#c0a0ff" opacity=".65" letter-spacing=".5">Telemetria Endpoint</text>
+      </svg>
+    </div>
+
+    <!-- CAMADA 2: SIEM (núcleo) -->
+    <div class="layer layer-siem">
+      <div class="siem-glow-bg"></div>
+      <span class="layer-label ll-siem" style="position:relative;z-index:1;">⬡ NÚCLEO — SIEM / XDR</span>
+      <div class="layer-nodes" style="position:relative;z-index:1;">
+        <div class="node elastic">
+          <div class="elastic-inner">
+            <div class="elastic-logo-wrap">
+              <div class="elastic-orb">
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                  <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#00bfff" stroke-width="5" opacity=".8"/>
+                  <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#005fa3" stroke-width="5" transform="rotate(60 50 50)" opacity=".8"/>
+                  <ellipse cx="50" cy="50" rx="46" ry="22" fill="none" stroke="#00e5ff" stroke-width="5" transform="rotate(120 50 50)" opacity=".8"/>
+                  <circle cx="50" cy="50" r="10" fill="#00bfff"/>
                 </svg>
               </div>
-              <div style="min-width:0;">
-                <div class="node-name" style="color:#ffcc55;">TheHive</div>
-                <div class="node-sub">RESPOSTA A INCIDENTES</div>
-              </div>
+              <h3>ELASTIC</h3><p>SIEM / XDR</p>
             </div>
-            <div class="node-pills">
-              <span class="npill">Gestão de Casos</span>
-              <span class="npill">Playbooks</span>
-              <span class="npill">MITRE ATT&CK</span>
-              <span class="npill">Cortex / SOAR</span>
-              <span class="npill">IOC Sharing</span>
-              <span class="npill">Colaboração SOC</span>
+            <div class="elastic-funcs">
+              <h4>// Funções do SIEM</h4>
+              <div class="func-grid">
+                <div class="func-cell"><span class="fi">📥</span><span class="ft">Coleta de Logs</span></div>
+                <div class="func-cell"><span class="fi">⚙️</span><span class="ft">Processamento</span></div>
+                <div class="func-cell"><span class="fi">🗄️</span><span class="ft">Armazenamento</span></div>
+                <div class="func-cell"><span class="fi">🔗</span><span class="ft">Correlação</span></div>
+                <div class="func-cell"><span class="fi">🚨</span><span class="ft">Alertas</span></div>
+                <div class="func-cell"><span class="fi">📊</span><span class="ft">Dashboards</span></div>
+                <div class="func-cell"><span class="fi">🛡️</span><span class="ft">Detecção</span></div>
+                <div class="func-cell"><span class="fi">📋</span><span class="ft">Incidentes</span></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /arch-body -->
+    <!-- CONECTOR ANIMADO: SIEM → Resposta -->
+    <div class="conn-svg-wrap" style="height:44px;">
+      <svg viewBox="0 0 800 44" preserveAspectRatio="none" style="height:44px;">
+        <defs>
+          <marker id="arr-amber" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <polygon points="0 0,6 3,0 6" fill="#ffab00" opacity=".9"/>
+          </marker>
+          <marker id="arr-green" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <polygon points="0 0,6 3,0 6" fill="#00e676" opacity=".9"/>
+          </marker>
+        </defs>
+        <!-- Centro divergindo para 2 nós -->
+        <line x1="400" y1="0" x2="180" y2="44" stroke="#ffab00" stroke-width="1.3" stroke-dasharray="4 3" opacity=".55" marker-end="url(#arr-amber)"/>
+        <line x1="400" y1="0" x2="620" y2="44" stroke="#00e676" stroke-width="1.3" stroke-dasharray="4 3" opacity=".55" marker-end="url(#arr-green)"/>
+        <!-- Partículas -->
+        <circle r="3.5" fill="#ffab00" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin="0s" path="M400,0 L180,44"/></circle>
+        <circle r="3.5" fill="#00e676" opacity=".9"><animateMotion dur="1.4s" repeatCount="indefinite" begin=".7s" path="M400,0 L620,44"/></circle>
+        <!-- Labels -->
+        <text x="235" y="30" font-family="'Share Tech Mono',monospace" font-size="7" fill="#ffcc55" opacity=".7" letter-spacing=".5">Incidentes / Casos</text>
+        <text x="460" y="30" font-family="'Share Tech Mono',monospace" font-size="7" fill="#55ee99" opacity=".7" letter-spacing=".5">IOC / Indicadores</text>
+      </svg>
+    </div>
 
-    <!-- LEGENDA -->
+    <!-- CAMADA 3: RESPOSTA SOC -->
+    <div class="layer">
+      <span class="layer-label ll-onprem">🖥 On-Premise — Camada de Resposta SOC</span>
+      <div class="layer-nodes">
+
+        <div class="node hive">
+          <div class="node-header">
+            <div class="node-logo">
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                <path d="M16 2l4.3 7.5H11.7L16 2z" fill="#ffab00"/>
+                <path d="M16 30l-4.3-7.5h8.6L16 30z" fill="#ff8800"/>
+                <path d="M8.5 9.5h15l2.6 4.5-2.6 4.5h-15l-2.6-4.5 2.6-4.5z" fill="#ffab00" opacity=".3" stroke="#ffab00" stroke-width="1"/>
+                <circle cx="16" cy="14" r="3" fill="#ffab00"/>
+              </svg>
+            </div>
+            <div><div class="node-name" style="color:#ffcc55;">TheHive</div><div class="node-sub">PLATAFORMA DE RESPOSTA A INCIDENTES</div></div>
+          </div>
+          <div class="node-pills">
+            <span class="npill">Gestão de Casos</span><span class="npill">Playbooks</span>
+            <span class="npill">MITRE ATT&CK</span><span class="npill">Cortex / SOAR</span>
+            <span class="npill">Compartilhamento IOC</span><span class="npill">Colaboração SOC</span>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+    <!-- Legenda + Status -->
     <div class="arch-footer">
       <div class="legend">
         <div class="legend-item"><div class="leg-line" style="background:linear-gradient(90deg,#00b4ff,#00ffea);"></div>Fluxo de dados / logs</div>
         <div class="legend-item"><div class="leg-line" style="border-top:1.5px dashed #00e676;"></div>Inteligência de ameaças</div>
         <div class="legend-item"><div class="leg-line" style="background:linear-gradient(90deg,#ffab00,#ff6600);"></div>Resposta a incidentes</div>
-        <div class="legend-item"><span style="color:#8b57ff;font-size:9px;">■</span> Nuvem / SaaS</div>
-        <div class="legend-item"><span style="color:#00e676;font-size:9px;">■</span> On-Premise</div>
+        <div class="legend-item"><span style="color:#8b57ff;font-size:10px;">■</span> Nuvem / SaaS</div>
+        <div class="legend-item"><span style="color:#00e676;font-size:10px;">■</span> On-Premise</div>
       </div>
-      <div style="font-family:var(--mono);font-size:8px;color:var(--dim);">SOC v2.1 — 7 Serviços Integrados</div>
+      <div class="status-pills">
+        <div class="st-pill"><div class="dot g"></div>Sistemas Operacionais</div>
+        <div class="st-pill"><div class="dot b"></div>Ingestão de Logs Ativa</div>
+        <div class="st-pill"><div class="dot a"></div>Feed de Ameaças</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);">SOC v2.1 — 7 Serviços</div>
+      </div>
     </div>
 
-  </div><!-- /row3 -->
+  </div><!-- /arch-wrapper -->
 
 </div><!-- /page -->
 
 <script>
+/* ═══════════════════
+   DADOS — EDITE AQUI
+═══════════════════ */
 const TEAM = [
   { name:'Rodrigo Aquino',  role:'Auditorias e Controles Internos', photo:null },
-  { name:'Paulo Mendes',    role:'Segurança da Informação',          photo:null },
-  { name:'Vinicius Silva',  role:'Segurança da Informação',          photo:null },
+  { name:'Paulo Mendes', role:'Segurança da Informação',          photo:null },
+  { name:'Vinicius Silva', role:'Segurança da Informação',          photo:null },
   { name:'Daniel Leite',    role:'Segurança da Informação',          photo:null },
-  { name:'Eder Eloy',       role:'Segurança da Informação',          photo:null },
+  { name:'Eder Eloy',         role:'Segurança da Informação',          photo:null },
 ];
 
 const CITIES = [
@@ -807,7 +892,7 @@ function wInfo(code) {
   const m = {
     0:{i:'☀️',d:'Céu limpo'},1:{i:'🌤️',d:'Principalmente limpo'},
     2:{i:'⛅',d:'Parcialmente nublado'},3:{i:'☁️',d:'Nublado'},
-    45:{i:'🌫️',d:'Neblina'},51:{i:'🌦️',d:'Garoa leve'},
+    45:{i:'🌫️',d:'Neblina'},51:{i:'🌦️',d:'Garoa leve'},53:{i:'🌦️',d:'Garoa moderada'},
     61:{i:'🌧️',d:'Chuva leve'},63:{i:'🌧️',d:'Chuva moderada'},65:{i:'🌧️',d:'Chuva forte'},
     80:{i:'🌦️',d:'Pancadas leves'},81:{i:'🌧️',d:'Pancadas moderadas'},
     95:{i:'⛈️',d:'Tempestade'},99:{i:'⛈️',d:'Tempestade forte'},
@@ -830,14 +915,20 @@ async function fetchWeather(city) {
   };
 }
 
+/* ── renderWeather ──────────────────────────────────────────────────────
+   Primeira chamada: constrói os cards com estrutura DOM fixa.
+   Atualizações seguintes: altera APENAS textContent dos nós folha —
+   sem innerHTML, sem reflow, sem scroll jump.
+──────────────────────────────────────────────────────────────────────── */
 function buildWeatherCard(city, idx) {
   const card = document.createElement('div');
   card.className = 'weather-card';
   card.dataset.city = idx;
+  /* Estrutura fixa — apenas os valores mudam depois */
   card.innerHTML = `
     <div class="w-city">📍 ${city.name}, Brasil</div>
     <div class="w-main">
-      <div class="w-ico" data-ico>⟳</div>
+      <div class="w-ico" data-ico></div>
       <div>
         <div class="w-temp"><span data-temp>--</span><sup>°C</sup></div>
         <div class="w-desc" data-desc>Carregando...</div>
@@ -853,6 +944,7 @@ function buildWeatherCard(city, idx) {
 }
 
 function patchWeatherCard(card, w, wi, today) {
+  /* Altera só textContent/emoji — nunca destrói o DOM do card */
   card.querySelector('[data-ico]').textContent   = wi.i;
   card.querySelector('[data-temp]').textContent  = w.temp;
   card.querySelector('[data-desc]').textContent  = wi.d;
@@ -866,15 +958,20 @@ async function renderWeather() {
   const row   = document.getElementById('weatherRow');
   const today = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
   const isFirst = row.children.length === 0;
+
   for (let i = 0; i < CITIES.length; i++) {
-    if (isFirst) row.appendChild(buildWeatherCard(CITIES[i], i));
+    const city = CITIES[i];
+
+    /* Primeira vez: cria e anexa o card com estrutura DOM completa */
+    if (isFirst) row.appendChild(buildWeatherCard(city, i));
+
     const card = row.querySelector(`[data-city="${i}"]`);
     if (!card) continue;
+
     try {
-      patchWeatherCard(card, await fetchWeather(CITIES[i]), wInfo(0), today);
-      const w = await fetchWeather(CITIES[i]);
+      const w  = await fetchWeather(city);
       patchWeatherCard(card, w, wInfo(w.code), today);
-    } catch {}
+    } catch { /* mantém os dados anteriores em caso de falha de rede */ }
   }
 }
 
@@ -889,17 +986,18 @@ function renderTeam() {
       : '👤';
     el.innerHTML = `
       <div class="m-av">${av}</div>
-      <div style="min-width:0;">
-        <div class="m-name">${m.name}</div>
-        <div class="m-role">${m.role}</div>
-      </div>`;
+      <div><div class="m-name">${m.name}</div><div class="m-role">${m.role}</div></div>`;
     grid.appendChild(el);
   });
 }
 
 renderTeam();
 renderWeather();
+/* Atualiza clima a cada 10 min preservando posição de scroll */
 setInterval(renderWeather, 10 * 60 * 1000);
+
+/* Radar: implementado como SVG fixo no HTML — sem canvas */
+
 </script>
 </body>
 </html>
