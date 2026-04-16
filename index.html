@@ -67,18 +67,19 @@ html, body {
   position:relative; z-index:1;
   width:100%; height:100%;
   display:grid;
-  grid-template-rows: 130px 115px 1fr;
+  grid-template-rows: 205px 118px 1fr;
   grid-template-columns: 1fr;
   padding:8px 12px;
   gap:6px;
+  overflow:hidden;
 }
 
 /* ── DIVISORES COM LABEL ── */
 .sdiv {
   display:flex; align-items:center; gap:8px;
-  font-family:var(--mono); font-size:8.5px;
+  font-family:var(--mono); font-size:10px;
   letter-spacing:1.8px; text-transform:uppercase;
-  white-space:nowrap; padding:2px 9px; border-radius:20px;
+  white-space:nowrap; padding:3px 10px; border-radius:20px;
   flex-shrink:0;
 }
 .sdiv.weather { color:var(--blue);   background:rgba(0,180,255,.07); border:1px solid rgba(0,180,255,.25); }
@@ -92,9 +93,10 @@ html, body {
 ══════════════════════════════════════ */
 .row1 {
   display:grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 360px 1fr;
   gap:8px;
   min-height:0;
+  overflow:hidden;
 }
 
 /* bloco interno de cada secao */
@@ -121,7 +123,7 @@ html, body {
 .w-city { font-family:var(--mono); font-size:8.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
 .w-main { display:flex; align-items:center; gap:8px; }
 .w-ico  { width:36px; height:36px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); border-radius:8px; font-size:20px; }
-.w-temp { font-size:22px; font-weight:800; line-height:1; letter-spacing:-1px; }
+.w-temp { font-size:28px; font-weight:800; line-height:1; letter-spacing:-1px; }
 .w-temp sup { font-size:10px; font-weight:400; vertical-align:super; color:var(--dim); }
 .w-desc { font-size:9.5px; color:var(--dim); font-weight:500; margin-top:1px; }
 .w-meta { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
@@ -144,11 +146,11 @@ html, body {
 }
 .team-grid {
   display:grid; grid-template-columns:repeat(5,1fr); gap:5px;
-  flex:1; min-height:0;
+  flex:1; min-height:0; overflow:hidden;
 }
 .member-card {
   background:var(--card); border:1px solid var(--border); border-radius:8px;
-  padding:6px 8px; display:flex; align-items:center; gap:7px;
+  padding:8px 10px; display:flex; align-items:center; gap:8px;
   transition:all .2s; position:relative; overflow:hidden; cursor:default;
 }
 .member-card::before {
@@ -159,13 +161,13 @@ html, body {
 .member-card:hover { background:rgba(0,100,180,.13); border-color:rgba(0,180,255,.4); transform:translateY(-1px); }
 .member-card:hover::before { transform:scaleY(1); }
 .m-av {
-  width:30px; height:30px; flex-shrink:0; border-radius:50%;
+  width:38px; height:38px; flex-shrink:0; border-radius:50%;
   border:1.5px solid rgba(0,180,255,.3); background:rgba(0,180,255,.1);
-  overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:14px;
+  overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:18px;
 }
 .m-av img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-.m-name { font-size:10.5px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; }
-.m-role { font-family:var(--mono); font-size:8px; color:var(--dim); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.m-name { font-size:12px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2; }
+.m-role { font-family:var(--mono); font-size:9px; color:var(--dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* ══════════════════════════════════════
    LINHA 2 — LINKS RÁPIDOS
@@ -179,7 +181,7 @@ html, body {
 }
 .menu-lbl::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(0,180,255,.2),transparent); }
 .menu-link {
-  display:flex; align-items:center; gap:7px; padding:5px 8px;
+  display:flex; align-items:center; gap:8px; padding:7px 10px;
   background:var(--card); border:1px solid var(--border); border-radius:7px;
   text-decoration:none; color:var(--text); transition:all .2s;
   position:relative; overflow:hidden; flex:1;
@@ -190,9 +192,9 @@ html, body {
 }
 .menu-link:hover { background:rgba(0,100,180,.15); border-color:rgba(0,180,255,.4); transform:translateX(2px); }
 .menu-link:hover::before { transform:scaleY(1); }
-.mi-ico { width:24px; height:24px; flex-shrink:0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); }
-.mi-title { font-size:11px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mi-desc  { font-size:9px; color:var(--dim); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mi-ico { width:28px; height:28px; flex-shrink:0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.18); }
+.mi-title { font-size:12.5px; font-weight:600; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mi-desc  { font-size:10px; color:var(--dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .mi-arr   { font-size:9px; color:var(--dim); margin-left:auto; transition:color .2s; flex-shrink:0; }
 .menu-link:hover .mi-arr { color:var(--blue); }
 
@@ -224,8 +226,8 @@ html, body {
   display:flex; flex-direction:column; gap:4px; min-height:0; overflow:hidden;
 }
 .layer-label {
-  font-family:var(--mono); font-size:7.5px; letter-spacing:1.5px; text-transform:uppercase;
-  padding:2px 7px; border-radius:3px; display:inline-flex; align-items:center; gap:4px;
+  font-family:var(--mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 8px; border-radius:3px; display:inline-flex; align-items:center; gap:4px;
   flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .ll-ext    { color:#ff9966; background:rgba(255,100,0,.07); border:1px solid rgba(255,100,0,.25); }
@@ -286,12 +288,12 @@ html, body {
 .axur      .node-logo { background:rgba(0,230,118,.12); border:1px solid rgba(0,230,118,.3); }
 .sonicwall .node-logo { background:rgba(255,102,0,.12); border:1px solid rgba(255,102,0,.3); }
 
-.node-name { font-size:clamp(9px,.75vw,11px); font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.node-name { font-size:clamp(10px,.85vw,13px); font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .node-sub  { font-family:var(--mono); font-size:clamp(6px,.45vw,7.5px); color:var(--dim); letter-spacing:.4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .node-pills { display:flex; flex-wrap:wrap; gap:2px; }
 .npill {
-  font-family:var(--mono); font-size:clamp(6px,.42vw,7.5px);
-  padding:1px 4px; border-radius:8px; white-space:nowrap;
+  font-family:var(--mono); font-size:clamp(7px,.48vw,8.5px);
+  padding:2px 5px; border-radius:8px; white-space:nowrap;
 }
 .defender  .npill { background:rgba(0,120,212,.1);  color:#4db0f0; border:1px solid rgba(0,120,212,.25); }
 .entraid   .npill { background:rgba(0,114,198,.1);  color:#4db0f0; border:1px solid rgba(0,114,198,.25); }
@@ -334,8 +336,8 @@ html, body {
   border-radius:5px; padding:4px 2px; text-align:center; transition:background .2s;
 }
 .func-cell:hover { background:rgba(0,180,255,.13); }
-.func-cell .fi { font-size:11px; display:block; margin-bottom:1px; }
-.func-cell .ft { font-family:var(--mono); font-size:6.5px; color:#7ab8d4; line-height:1.2; }
+.func-cell .fi { font-size:14px; display:block; margin-bottom:2px; }
+.func-cell .ft { font-family:var(--mono); font-size:8px; color:#7ab8d4; line-height:1.2; }
 
 /* ── CONECTORES SVG (colunas pares) ── */
 .conn-col {
