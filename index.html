@@ -30,7 +30,7 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; background:var(--bg); font-family:var(--sans); color:var(--text); overflow-x:hidden; }
+html, body { width:100%; background:var(--bg); font-family:var(--sans); color:var(--text); overflow-x:hidden; overflow-y:auto; }
 
 /* ── Camada fixa de fundo: contém grade + radar ──────────────────────
    position:fixed + overflow:hidden: cobre a viewport, não empurra
@@ -65,7 +65,7 @@ html, body { width:100%; background:var(--bg); font-family:var(--sans); color:va
   position:relative; z-index:1;
   width:100%;
   display:flex; flex-direction:column;
-  padding:12px 16px 40px; /* padding-bottom extra para o iframe não cortar */
+  padding:12px 16px 20px;
   gap:0;
 }
 
@@ -1010,36 +1010,5 @@ setInterval(renderWeather, 10 * 60 * 1000);
 
 </script>
 
-<script>
-/* ── Auto-resize para SharePoint iframe ─────────────────────────────
-   Envia a altura real do documento ao pai (SharePoint) a cada 400ms
-   durante os primeiros 8s (enquanto o DOM ainda está sendo populado),
-   depois a cada 3s para ajustes dinâmicos.
-   O SharePoint aceita EmbedMessage com height para redimensionar o iframe.
-──────────────────────────────────────────────────────────────────────── */
-(function() {
-  function sendHeight() {
-    const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-    try {
-      window.parent.postMessage({ EmbedMessage: true, height: h + 20 }, '*');
-      // Formato alternativo usado por algumas versões do SharePoint
-      window.parent.postMessage(JSON.stringify({ EmbedMessage: true, height: h + 20 }), '*');
-    } catch(e) {}
-  }
-
-  // Dispara frequentemente no início enquanto o conteúdo carrega
-  let count = 0;
-  const fast = setInterval(function() {
-    sendHeight();
-    if (++count >= 20) {          // 20 × 400ms = 8s
-      clearInterval(fast);
-      setInterval(sendHeight, 3000); // depois, a cada 3s
-    }
-  }, 400);
-
-  // Também dispara quando imagens / fontes terminam de carregar
-  window.addEventListener('load', sendHeight);
-})();
-</script>
 </body>
 </html>
