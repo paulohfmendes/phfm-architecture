@@ -30,30 +30,31 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-html { width:100%; background:var(--bg); }
-body {
-  width:100%; min-height:100%;
-  background:var(--bg);
-  font-family:var(--sans); color:var(--text);
-  overflow-x:hidden;
-  position:relative; /* ancora os filhos absolute (grid, radar) */
+html, body { width:100%; background:var(--bg); font-family:var(--sans); color:var(--text); overflow-x:hidden; }
+
+/* ── Camada fixa de fundo: contém grade + radar ──────────────────────
+   position:fixed + overflow:hidden: cobre a viewport, não empurra
+   o body, não bloqueia o scroll do conteúdo.
+───────────────────────────────────────────────────────────────────── */
+#bg-layer {
+  position:fixed; inset:0;
+  pointer-events:none; z-index:0;
+  overflow:hidden;
+}
+#bg-layer::before {
+  content:''; position:absolute; inset:0;
+  background-image: linear-gradient(var(--grid) 1px,transparent 1px),
+                    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:36px 36px;
 }
 
-/* Fundo grade */
-body::before {
-  content:''; position:absolute; inset:0;
-  background-image: linear-gradient(var(--grid) 1px,transparent 1px), linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:36px 36px; pointer-events:none; z-index:0;
-}
-/* ── RADAR DE FUNDO ── */
+/* ── RADAR ── */
 #radar-bg {
   position:absolute;
-  top:0; left:50%;
-  transform:translateX(-50%);
-  width:180vw; height:180vw;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:180vmax; height:180vmax;
   pointer-events:none;
-  z-index:0;
-  opacity:1;
   will-change:transform;
 }
 
@@ -424,7 +425,8 @@ body::before {
 </head>
 <body>
 
-<!-- ══ RADAR DE FUNDO ══ -->
+<!-- ══ CAMADA DE FUNDO: GRADE + RADAR ══ -->
+<div id="bg-layer">
 <svg id="radar-bg" viewBox="-900 -900 1800 1800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     <!-- Gradiente cônico da sombra: nasce opaco logo atrás da linha,
@@ -477,6 +479,7 @@ body::before {
     <circle cx="900" cy="0" r="3" fill="#00ffea" opacity="0.25"/>
   </g>
 </svg>
+</div><!-- /bg-layer -->
 
 <div class="page">
 
