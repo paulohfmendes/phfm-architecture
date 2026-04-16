@@ -30,20 +30,27 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; background:var(--bg); font-family:var(--sans); color:var(--text); overflow-x:hidden; }
+html { width:100%; background:var(--bg); }
+body {
+  width:100%; min-height:100%;
+  background:var(--bg);
+  font-family:var(--sans); color:var(--text);
+  overflow-x:hidden;
+  position:relative; /* ancora os filhos absolute (grid, radar) */
+}
 
 /* Fundo grade */
 body::before {
-  content:''; position:fixed; inset:0;
+  content:''; position:absolute; inset:0;
   background-image: linear-gradient(var(--grid) 1px,transparent 1px), linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:36px 36px; pointer-events:none; z-index:0;
 }
 /* ── RADAR DE FUNDO ── */
 #radar-bg {
-  position:fixed;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:180vmax; height:180vmax;
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  width:180vw; height:180vw;
   pointer-events:none;
   z-index:0;
   opacity:1;
@@ -57,7 +64,7 @@ body::before {
   position:relative; z-index:1;
   width:100%;
   display:flex; flex-direction:column;
-  padding:12px 16px 14px;
+  padding:12px 16px 40px; /* padding-bottom extra para o iframe não cortar */
   gap:0;
 }
 
@@ -998,6 +1005,38 @@ setInterval(renderWeather, 10 * 60 * 1000);
 
 /* Radar: implementado como SVG fixo no HTML — sem canvas */
 
+</script>
+
+<script>
+/* ── Auto-resize para SharePoint iframe ─────────────────────────────
+   Envia a altura real do documento ao pai (SharePoint) a cada 400ms
+   durante os primeiros 8s (enquanto o DOM ainda está sendo populado),
+   depois a cada 3s para ajustes dinâmicos.
+   O SharePoint aceita EmbedMessage com height para redimensionar o iframe.
+──────────────────────────────────────────────────────────────────────── */
+(function() {
+  function sendHeight() {
+    const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+    try {
+      window.parent.postMessage({ EmbedMessage: true, height: h + 20 }, '*');
+      // Formato alternativo usado por algumas versões do SharePoint
+      window.parent.postMessage(JSON.stringify({ EmbedMessage: true, height: h + 20 }), '*');
+    } catch(e) {}
+  }
+
+  // Dispara frequentemente no início enquanto o conteúdo carrega
+  let count = 0;
+  const fast = setInterval(function() {
+    sendHeight();
+    if (++count >= 20) {          // 20 × 400ms = 8s
+      clearInterval(fast);
+      setInterval(sendHeight, 3000); // depois, a cada 3s
+    }
+  }, 400);
+
+  // Também dispara quando imagens / fontes terminam de carregar
+  window.addEventListener('load', sendHeight);
+})();
 </script>
 </body>
 </html>
