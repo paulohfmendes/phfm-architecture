@@ -47,6 +47,7 @@ body::before {
   pointer-events:none;
   z-index:0;
   opacity:1;
+  will-change:transform;
 }
 
 /* ══════════════════════════════════════
@@ -349,12 +350,16 @@ body::before {
   background:linear-gradient(135deg,#071e3d 0%,#0a2545 50%,#071e3d 100%);
   border:1.5px solid rgba(0,180,255,.45);
   box-shadow:0 0 30px rgba(0,180,255,.1), inset 0 0 30px rgba(0,50,120,.2);
+  overflow:hidden;
+  /* contain:layout — evita que animações internas causem reflow global */
+  contain:layout style;
 }
 .siem-glow-bg {
   position:absolute; top:-50%; left:-50%; width:200%; height:200%;
   background:conic-gradient(from 0deg,transparent 0deg,rgba(0,180,255,.025) 60deg,transparent 120deg);
   animation:siem-rotate 20s linear infinite;
   pointer-events:none;
+  will-change:transform;
 }
 .node.elastic {
   background:linear-gradient(135deg,#071e3d,#0d2a4a);
@@ -910,53 +915,63 @@ async function fetchWeather(city) {
   };
 }
 
-/* ── renderWeather: atualiza os dados SEM recriar os cards
-   (evita o jump de scroll causado por innerHTML reset)     ── */
-async function renderWeather() {
-  const row = document.getElementById('weatherRow');
-  const today = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+/* ── renderWeather ──────────────────────────────────────────────────────
+   Primeira chamada: constrói os cards com estrutura DOM fixa.
+   Atualizações seguintes: altera APENAS textContent dos nós folha —
+   sem innerHTML, sem reflow, sem scroll jump.
+──────────────────────────────────────────────────────────────────────── */
+function buildWeatherCard(city, idx) {
+  const card = document.createElement('div');
+  card.className = 'weather-card';
+  card.dataset.city = idx;
+  /* Estrutura fixa — apenas os valores mudam depois */
+  card.innerHTML = `
+    <div class="w-city">📍 ${city.name}, Brasil</div>
+    <div class="w-main">
+      <div class="w-ico" data-ico></div>
+      <div>
+        <div class="w-temp"><span data-temp>--</span><sup>°C</sup></div>
+        <div class="w-desc" data-desc>Carregando...</div>
+      </div>
+    </div>
+    <div class="w-meta">
+      <div class="w-badge" data-range>🌡️ --</div>
+      <div class="w-badge" data-hum>💧 --</div>
+      <div class="w-badge" data-wind>💨 --</div>
+      <div class="w-badge" data-date>📅 --</div>
+    </div>`;
+  return card;
+}
 
-  /* Primeira chamada: cria os cards; atualizações seguintes: só troca texto */
-  const isFirst = row.children.length === 0 || row.querySelector('.w-loading');
+function patchWeatherCard(card, w, wi, today) {
+  /* Altera só textContent/emoji — nunca destrói o DOM do card */
+  card.querySelector('[data-ico]').textContent   = wi.i;
+  card.querySelector('[data-temp]').textContent  = w.temp;
+  card.querySelector('[data-desc]').textContent  = wi.d;
+  card.querySelector('[data-range]').textContent = `🌡️ ${w.max}°/${w.min}°`;
+  card.querySelector('[data-hum]').textContent   = `💧 ${w.hum}%`;
+  card.querySelector('[data-wind]').textContent  = `💨 ${w.wind} km/h`;
+  card.querySelector('[data-date]').textContent  = `📅 ${today}`;
+}
+
+async function renderWeather() {
+  const row   = document.getElementById('weatherRow');
+  const today = new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const isFirst = row.children.length === 0;
 
   for (let i = 0; i < CITIES.length; i++) {
     const city = CITIES[i];
-    let card;
 
-    if (isFirst) {
-      card = document.createElement('div');
-      card.className = 'weather-card';
-      card.dataset.city = i;
-      row.appendChild(card);
-    } else {
-      card = row.querySelector(`[data-city="${i}"]`);
-      if (!card) continue;
-    }
+    /* Primeira vez: cria e anexa o card com estrutura DOM completa */
+    if (isFirst) row.appendChild(buildWeatherCard(city, i));
+
+    const card = row.querySelector(`[data-city="${i}"]`);
+    if (!card) continue;
 
     try {
-      const w = await fetchWeather(city);
-      const wi = wInfo(w.code);
-      /* innerHTML apenas neste card individual — não afeta o layout do resto da página */
-      card.innerHTML = `
-        <div class="w-main">
-          <div class="w-ico">${wi.i}</div>
-          <div>
-            <div class="w-temp">${w.temp}<sup>°C</sup></div>
-            <div class="w-desc">${wi.d}</div>
-          </div>
-        </div>
-        <div class="w-center">
-          <div class="w-city">📍 ${city.name}, Brasil</div>
-          <div class="w-meta">
-            <div class="w-badge">🌡️ ${w.max}°/${w.min}°</div>
-            <div class="w-badge">💧 ${w.hum}%</div>
-            <div class="w-badge">💨 ${w.wind} km/h</div>
-            <div class="w-badge">📅 ${today}</div>
-          </div>
-        </div>`;
-    } catch {
-      if (isFirst) card.innerHTML = `<div class="w-city">📍 ${city.name}</div><div class="w-loading">Sem conexão</div>`;
-    }
+      const w  = await fetchWeather(city);
+      patchWeatherCard(card, w, wInfo(w.code), today);
+    } catch { /* mantém os dados anteriores em caso de falha de rede */ }
   }
 }
 
